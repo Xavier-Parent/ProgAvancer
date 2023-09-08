@@ -7,7 +7,7 @@ void InitGameplay(void) {
 
 }
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
-	homer::engin theEngine;
+	homer::Engin theEngine;
 	if (theEngine.Init("TestGame", 800, 600)) {
 		InitGameplay();
 		theEngine.Start();

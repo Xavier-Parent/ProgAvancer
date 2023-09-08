@@ -1,10 +1,14 @@
 #include "engin.h"
-#include <SDL.h>
+#include "SDL.h"
 #include <time.h>
+#include "SDLInput.h"
+#include "Window.h"
 
 static SDL_Renderer* _renderer = NULL;
 static SDL_Window* _window = NULL;
-bool homer::engin::Init(const char* name, int w, int h) {
+using namespace homer;
+bool Engin::Init(const char* name, int w, int h) {
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		SDL_Log(SDL_GetError());
 		return false; 
@@ -28,12 +32,13 @@ bool homer::engin::Init(const char* name, int w, int h) {
 		SDL_Log(SDL_GetError());
 		return false;
 	}
+	m_Input = new SdlInput();
 	m_IsInit = true;
 
 	return true;
 }
 
-void homer::engin::Start(void) {
+void Engin::Start(void) {
 	if (!m_IsInit) {
 		if (!Init("Unknow title",800,600)) {
 			return;
@@ -54,31 +59,31 @@ void homer::engin::Start(void) {
 	//ShutDown();
 }
 
-static const unsigned char* _keyStates = NULL;
-void homer::engin::ProcessInput(void)
+void Engin::ProcessInput(void)
 {
-	SDL_Event _event;
-	while (SDL_PollEvent(&_event))
-	{
-		switch (_event.type)
-		{
-		case SDL_QUIT:
-			m_IsRunning = false;
-			break;
-		}
-	}
-	_keyStates = SDL_GetKeyboardState(nullptr);
+	m_Input->Update();
+
 }
 
 static float x = 0.0f;
-void homer::engin::Update(float dt)
+static float y = 0.0f;
+void Engin::Update(float dt)
 {
-	if (_keyStates[SDL_SCANCODE_D]) {
+	if (m_Input->IsKeyDown(SDL_SCANCODE_D)) {
 		x += 100 * dt;
+	}
+	if (m_Input->IsKeyDown(SDL_SCANCODE_A)) {
+		x -= 100 * dt;
+	}
+	if (m_Input->IsKeyDown(SDL_SCANCODE_W)) {
+		y += 100 * dt;
+	}
+	if (m_Input->IsKeyDown(SDL_SCANCODE_S)) {
+		y -= 100 * dt;
 	}
 }
 
-void homer::engin::Render(void)
+void Engin::Render(void)
 {
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(_renderer);
@@ -94,8 +99,12 @@ void homer::engin::Render(void)
 	SDL_RenderPresent(_renderer);
 }
 
-void homer::engin::ShutDown(void)
+void Engin::ShutDown(void)
 {
+	if (m_Input != nullptr)
+	{
+		delete m_Input;
+	}
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
