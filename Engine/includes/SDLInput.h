@@ -1,4 +1,3 @@
-
 #include "IInput.h"
 namespace homer {
 	class SdlInput final : public IInput
@@ -14,4 +13,5 @@ namespace homer {
 		int m_MouseX = 0;
 		int m_MouseY = 0;
 		bool m_MouseStates[3]{ false, false, false };
-	};}
+	};
+}

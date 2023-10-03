@@ -2,10 +2,13 @@
 #include "SDL.h"
 #include <time.h>
 #include "SDLInput.h"
-#include "Window.h"
+#include "Windows.h"
+#include "FileLogger.h"
+#include "ConsoleLogger.h"
 
 static SDL_Renderer* _renderer = NULL;
 static SDL_Window* _window = NULL;
+
 using namespace homer;
 bool Engin::Init(const char* name, int w, int h) {
 
@@ -35,6 +38,14 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Input = new SdlInput();
 	m_IsInit = true;
 
+#ifdef _DEBUG
+	m_Logger = new ConsoleLogger();
+#endif
+
+	m_Logger = new FileLogger();
+#ifdef NDEBUG
+	//mettre le file logger ici ^
+#endif
 	return true;
 }
 
@@ -49,14 +60,20 @@ void Engin::Start(void) {
 
 	while (m_IsRunning) {
 		const clock_t _start = clock();
-		float dt = (_start - _end) * 0.001f;
+		float _dt = (_start - _end) * 0.001f;
 		ProcessInput();
-		Update(dt);
+		Update(_dt);
 		Render();
 
+		float elapse = _end - _start * 16.666f;
+		if(elapse < 0)
+		{
+			Sleep(elapse * 0.001f);
+		}
 		_end = _start;
+		
 	}
-	//ShutDown();
+	ShutDown();
 }
 
 void Engin::ProcessInput(void)
@@ -67,20 +84,35 @@ void Engin::ProcessInput(void)
 
 static float x = 0.0f;
 static float y = 0.0f;
+static float speed = 100;
 void Engin::Update(float dt)
 {
-	if (m_Input->IsKeyDown(SDL_SCANCODE_D)) {
-		x += 100 * dt;
+	if (m_Input->IsKeyDown(7)) {
+		x += speed * dt;
 	}
-	if (m_Input->IsKeyDown(SDL_SCANCODE_A)) {
-		x -= 100 * dt;
+	if (m_Input->IsKeyDown(4)) {
+		x -= speed * dt;
 	}
-	if (m_Input->IsKeyDown(SDL_SCANCODE_W)) {
-		y += 100 * dt;
+	if (m_Input->IsKeyDown(26)) {
+		y -= speed * dt;
 	}
-	if (m_Input->IsKeyDown(SDL_SCANCODE_S)) {
-		y -= 100 * dt;
+	if (m_Input->IsKeyDown(22)) {
+		y += speed * dt;
 	}
+	if (m_Input->IsKeyDown(42)) {
+		m_Logger->Log("BackSpace");
+	}
+	if (m_Input->IsKeyDown(44)) {
+		m_Logger->Log("SpaceBar");
+	}
+
+#ifdef _DEBUG
+	if (m_Input->IsKeyDown(41))
+	{
+		ShutDown();
+	}
+#endif
+	
 }
 
 void Engin::Render(void)
@@ -91,7 +123,7 @@ void Engin::Render(void)
 	SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
 	SDL_Rect get_rect = { 0 };
 	get_rect.x = x;
-	get_rect.y = 100;
+	get_rect.y = y;
 	get_rect.h = 100;
 	get_rect.w = 100;
 	SDL_RenderDrawRect(_renderer,&get_rect);
@@ -101,10 +133,11 @@ void Engin::Render(void)
 
 void Engin::ShutDown(void)
 {
-	if (m_Input != nullptr)
-	{
-		delete m_Input;
-	}
+	//if (m_Input != nullptr)
+	//{
+	//	delete m_Input;
+	//}
+	m_IsRunning = false;
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
