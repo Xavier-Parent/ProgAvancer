@@ -14,12 +14,13 @@ namespace homer {
 			{
 				m_Instance = new Engin();
 			}
-
+			return m_Instance;
 		}
 
 		bool Init(const char* name, int w, int h);
+		void Quit();
 		void Start(void);
-		IInput& Input() { return *m_Input; };
+		IInput& Input() const { return *m_Input; };
 	private:
 		void ProcessInput(void);
 		void Update(float dt);
@@ -27,8 +28,8 @@ namespace homer {
 		void ShutDown(void);
 		ILogger& Logger() { return *m_Logger; }
 	private:
-		IInput* m_Input;
 		bool m_IsRunning = false;
+		IInput* m_Input;
 		bool m_IsInit = false;
 		ILogger* m_Logger = nullptr;
 	};

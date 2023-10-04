@@ -42,9 +42,8 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Logger = new ConsoleLogger();
 #endif
 
-	m_Logger = new FileLogger();
 #ifdef NDEBUG
-	//mettre le file logger ici ^
+	m_Logger = new FileLogger();
 #endif
 	return true;
 }
@@ -65,10 +64,10 @@ void Engin::Start(void) {
 		Update(_dt);
 		Render();
 
-		float elapse = _end - _start * 16.666f;
-		if(elapse < 0)
+		float elapse = (_end - _start) * 16.666f * 0.001f;
+		if(elapse > 0)
 		{
-			Sleep(elapse * 0.001f);
+			Sleep(elapse);
 		}
 		_end = _start;
 		
@@ -131,12 +130,13 @@ void Engin::Render(void)
 	SDL_RenderPresent(_renderer);
 }
 
+void Engin::Quit()
+{
+	m_IsRunning = false;
+}
+
 void Engin::ShutDown(void)
 {
-	//if (m_Input != nullptr)
-	//{
-	//	delete m_Input;
-	//}
 	m_IsRunning = false;
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);

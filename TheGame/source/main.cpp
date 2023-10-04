@@ -10,8 +10,8 @@ void InitGameplay(void) {
 
 }
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
-	homer::Engin theEngine;
-	if (theEngine.Init("TestGame", 800, 600)) {
+	homer::Engin* theEngine = homer::Engin::Get();
+	if (theEngine->Init("TestGame", 800, 600)) {
 		InitGameplay();
 		std:: ofstream MyFile("filename.txt");
 
@@ -20,7 +20,7 @@ INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
 
 		// Close the file
 		MyFile.close();
-		theEngine.Start();
+		theEngine->Start();
 	}
 	return 0;
 }

@@ -1,5 +1,7 @@
 #include "SDLInput.h"
 #include <SDL.h>
+#include "engin.h"
+
 using namespace homer;
 void SdlInput::Update()
 {
@@ -9,8 +11,7 @@ void SdlInput::Update()
 		switch (_event.type)
 		{
 		case SDL_QUIT:
-			
-			//m_IsRunning = false;
+			homer::Engin::Get()->Quit();
 			break;
 		}
 	}
