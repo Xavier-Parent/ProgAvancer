@@ -2,6 +2,7 @@
 #include <string>
 #include "IInput.h"
 #include "ILogger.h"
+#include "IGraphics.h"
 
 
 namespace homer {
@@ -32,5 +33,6 @@ namespace homer {
 		IInput* m_Input;
 		bool m_IsInit = false;
 		ILogger* m_Logger = nullptr;
+		IGraphics* m_Graphics;
 	};
 }

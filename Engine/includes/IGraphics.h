@@ -1,30 +1,32 @@
 #pragma once
 #include <iostream>
 #include "Color.h"
+
+struct RectI
+{
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
+struct RectF
+{
+	float x;
+	float y;
+	float w;
+	float h;
+};
+
+struct Flip
+{
+	bool h;
+	bool v;
+};
 class IGraphics
 {
 public:
-	struct RectI
-	{
-		int x;
-		int y;
-		int w;
-		int h;
-	};
 
-	struct RectF
-	{
-		float x;
-		float y;
-		float w;
-		float h;
-	};
-
-	struct Flip
-	{
-		bool h;
-		bool v;
-	};
 	virtual void DrawLine(int x0, int y0,int x1,int y1) = 0;
 
 	virtual bool Initialize(const std::string& title, int w, int h) = 0;
@@ -66,5 +68,6 @@ public:
 
 
 private:
+
 };
 

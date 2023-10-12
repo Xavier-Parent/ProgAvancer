@@ -5,38 +5,18 @@
 #include "Windows.h"
 #include "FileLogger.h"
 #include "ConsoleLogger.h"
+#include "SDLGraphics.h"
 
-static SDL_Renderer* _renderer = NULL;
-static SDL_Window* _window = NULL;
+//static SDL_Renderer* _renderer = NULL;
+//static SDL_Window* _window = NULL;
 
 using namespace homer;
 bool Engin::Init(const char* name, int w, int h) {
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		SDL_Log(SDL_GetError());
-		return false; 
-		
-	}
-	int _x = SDL_WINDOWPOS_CENTERED;
-	int _y = SDL_WINDOWPOS_CENTERED;
-	Uint32 _flag = SDL_WINDOW_TOOLTIP;
-	_window = SDL_CreateWindow(name, _x, _y, w, h, _flag);
-	if (!_window)
-	{
-		SDL_Log(SDL_GetError());
-		return false;
-	}
-
-	Uint32 _flag2 = SDL_RENDERER_ACCELERATED;
-	_renderer = SDL_CreateRenderer(_window, -1, _flag2);
-
-	if (!_renderer)
-	{
-		SDL_Log(SDL_GetError());
-		return false;
-	}
 	m_Input = new SdlInput();
 	m_IsInit = true;
+	m_Graphics = new SDLGraphics();
+	m_Graphics->Initialize(name, w, h);
 
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
@@ -78,7 +58,6 @@ void Engin::Start(void) {
 void Engin::ProcessInput(void)
 {
 	m_Input->Update();
-
 }
 
 static float x = 0.0f;
@@ -116,18 +95,22 @@ void Engin::Update(float dt)
 
 void Engin::Render(void)
 {
-	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
-	SDL_RenderClear(_renderer);
+	m_Graphics->Clear();
+	RectF _carre;
+	_carre.x = 0;
+	_carre.y = 0;
+	_carre.h = 500;
+	_carre.w = 500;
+	
+	m_Graphics->DrawTexture(m_Graphics->LoadTexture("assets/Candle.png"), _carre,Color::Red);
+	m_Graphics->DrawRect(x, y, 100, 100, Color::Red);
 
-	SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-	SDL_Rect get_rect = { 0 };
-	get_rect.x = x;
-	get_rect.y = y;
-	get_rect.h = 100;
-	get_rect.w = 100;
-	SDL_RenderDrawRect(_renderer,&get_rect);
 
-	SDL_RenderPresent(_renderer);
+
+
+
+	m_Graphics->Present();
+	
 }
 
 void Engin::Quit()
@@ -138,7 +121,6 @@ void Engin::Quit()
 void Engin::ShutDown(void)
 {
 	m_IsRunning = false;
-	SDL_DestroyRenderer(_renderer);
-	SDL_DestroyWindow(_window);
+	//SDL_DestroyRenderer(_renderer);
 	SDL_Quit();
 }

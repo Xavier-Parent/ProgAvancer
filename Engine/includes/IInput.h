@@ -15,7 +15,8 @@ namespace homer{
 		EKEY_LEFT = 80,
 		EKEY_DOWN = 81,
 		EKEY_UP = 82,
-	};
+	};
+
 	class IInput
 	{
 	public:
@@ -27,4 +28,5 @@ namespace homer{
 
 		friend class Engin;
 		virtual void Update() = 0;
-	};}
+	};
+}
