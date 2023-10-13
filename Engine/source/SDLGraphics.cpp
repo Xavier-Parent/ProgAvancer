@@ -146,17 +146,53 @@ void SDLGraphics::GetTextureSize(size_t id, int* w, int* h)
 
 size_t SDLGraphics::LoadFont(const std::string& filename, int fontSize)
 {
-    TTF_Font* _font = TTF_OpenFont(filename.c_str(), fontSize);
+	const size_t id = std::hash<std::string>()(filename);
 
-    return size_t();
+	if (m_FontMap.count(id) > 0)
+	{
+		return id;
+	}
+	TTF_Font* _font = TTF_OpenFont(filename.c_str(), fontSize);
+	if (_font != NULL)
+	{
+		m_FontMap[id] = _font;
+	}
+
+
+	return id;
 }
 
 void SDLGraphics::DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color)
 {
+	if (m_FontMap.count(fontId) > 0)
+	{
+		SDL_Rect* _destination = new SDL_Rect();
+		_destination->x = x;
+		_destination->y = y;
+		GetTextSize(text,fontId,&_destination->w,&_destination->h);
+		SDL_Color* _color = new SDL_Color();
+		_color->r = color.red;
+
+
+		TTF_Font* _font = m_FontMap[fontId];
+		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), *_color);
+		g_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
+		SDL_RenderCopy(m_Renderer, g_TextureBuffer, nullptr, _destination);
+		SDL_FreeSurface(_surface);
+	}
 
 }
 
 void SDLGraphics::GetTextSize(const std::string& text, size_t fontId, int* w, int* h)
 {
-
+	if (m_FontMap.count(fontId) > 0)
+	{
+		TTF_Font* fontText = m_FontMap[fontId];
+		TTF_SizeText(fontText, text.c_str(), w, h);
+	}
+	else
+	{
+		*w = 0;
+		*h = 0;
+	}
 }

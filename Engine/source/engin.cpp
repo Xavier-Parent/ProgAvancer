@@ -6,6 +6,7 @@
 #include "FileLogger.h"
 #include "ConsoleLogger.h"
 #include "SDLGraphics.h"
+#include "SDLAudio.h"
 
 //static SDL_Renderer* _renderer = NULL;
 //static SDL_Window* _window = NULL;
@@ -16,7 +17,11 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Input = new SdlInput();
 	m_IsInit = true;
 	m_Graphics = new SDLGraphics();
+	m_Audio = new SDLAudio();
 	m_Graphics->Initialize(name, w, h);
+
+	// la music ne marche pas.
+	//m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Coin.wav"));
 
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
@@ -67,6 +72,7 @@ void Engin::Update(float dt)
 {
 	if (m_Input->IsKeyDown(7)) {
 		x += speed * dt;
+		m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
 	}
 	if (m_Input->IsKeyDown(4)) {
 		x -= speed * dt;
@@ -101,16 +107,12 @@ void Engin::Render(void)
 	_carre.y = 0;
 	_carre.h = 500;
 	_carre.w = 500;
-	
+
 	m_Graphics->DrawTexture(m_Graphics->LoadTexture("assets/Candle.png"), _carre,Color::Red);
+	m_Graphics->DrawString("allo", m_Graphics->LoadFont("assets/Happy.ttf",50),60,60,Color::Blue);
 	m_Graphics->DrawRect(x, y, 100, 100, Color::Red);
 
-
-
-
-
 	m_Graphics->Present();
-	
 }
 
 void Engin::Quit()

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "IAudio.h"
 #include "SDL_mixer.h"
+#include <map>
 
 class SDLAudio : public IAudio
 {
@@ -21,5 +22,7 @@ public:
 	virtual void SetVolume(size_t soundId, int volume) override;
 
 private:
+	std::map<size_t, Mix_Music*> m_MusicMap;
+	std::map<size_t, Mix_Chunk*> m_SoundMap;
 
 };

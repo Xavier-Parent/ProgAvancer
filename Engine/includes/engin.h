@@ -3,7 +3,7 @@
 #include "IInput.h"
 #include "ILogger.h"
 #include "IGraphics.h"
-
+#include "IAudio.h"
 
 namespace homer {
 	class Engin final {
@@ -34,5 +34,6 @@ namespace homer {
 		bool m_IsInit = false;
 		ILogger* m_Logger = nullptr;
 		IGraphics* m_Graphics;
+		IAudio* m_Audio;
 	};
 }

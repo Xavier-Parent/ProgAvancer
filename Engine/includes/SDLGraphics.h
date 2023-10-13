@@ -48,8 +48,11 @@ public:
 
 private:
 	std::map<size_t, SDL_Texture*> m_TextureMap;
+	std::map<size_t, TTF_Font*> m_FontMap;
+
 	SDL_Renderer* m_Renderer;
 	SDL_Window* m_Window;
+	SDL_Texture* g_TextureBuffer;
 
 };
 
