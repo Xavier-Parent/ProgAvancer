@@ -20,7 +20,7 @@ public:
 
 	virtual void Present() override;
 
-	virtual void DrawRect(float x, float y, float w, float h, const Color& color) override;
+	virtual void DrawRect(int x, int y, int w, int h, const Color& color) override;
 
 	virtual void DrawRect(const RectF& rect, const Color& color) override;
 
@@ -50,9 +50,9 @@ private:
 	std::map<size_t, SDL_Texture*> m_TextureMap;
 	std::map<size_t, TTF_Font*> m_FontMap;
 
-	SDL_Renderer* m_Renderer;
-	SDL_Window* m_Window;
-	SDL_Texture* g_TextureBuffer;
+	SDL_Renderer* m_Renderer = nullptr;
+	SDL_Window* m_Window = nullptr;
+	SDL_Texture* m_TextureBuffer = nullptr;
 
 };
 

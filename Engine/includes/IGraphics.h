@@ -39,7 +39,7 @@ public:
 
 	virtual void Present() = 0;
 
-	virtual void DrawRect(float x, float y, float w, float h, const Color& color) = 0;
+	virtual void DrawRect(int x, int y, int w, int h, const Color& color) = 0;
 
 	virtual void DrawRect(const RectF& rect, const Color& color) = 0;
 

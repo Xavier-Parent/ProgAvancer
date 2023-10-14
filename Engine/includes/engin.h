@@ -30,10 +30,10 @@ namespace homer {
 		ILogger& Logger() { return *m_Logger; }
 	private:
 		bool m_IsRunning = false;
-		IInput* m_Input;
+		IInput* m_Input = nullptr;
 		bool m_IsInit = false;
 		ILogger* m_Logger = nullptr;
-		IGraphics* m_Graphics;
-		IAudio* m_Audio;
+		IGraphics* m_Graphics = nullptr;
+		IAudio* m_Audio = nullptr;
 	};
 }

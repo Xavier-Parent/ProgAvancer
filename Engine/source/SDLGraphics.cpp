@@ -2,13 +2,13 @@
 
 SDLGraphics::SDLGraphics()
 {
-
 }
 
 void SDLGraphics::DrawLine(int x0, int y0, int x1, int y1)
 {
     SDL_RenderDrawLine(m_Renderer, x0, y0, x1, y1);
 }
+
 
 bool SDLGraphics::Initialize(const std::string& title, int w, int h)
 {
@@ -61,7 +61,7 @@ void SDLGraphics::Present()
 	SDL_RenderPresent(m_Renderer);
 }
 
-void SDLGraphics::DrawRect(float x, float y, float w, float h, const Color& color)
+void SDLGraphics::DrawRect(int x, int y, int w, int h, const Color& color)
 {
 	SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
     SDL_Rect _rect = { x, y, w, h };
@@ -113,10 +113,10 @@ void SDLGraphics::DrawTexture(size_t id, const RectF& dst, const Color& color)
 	if (m_TextureMap.count(id) > 0)
 	{
 		SDL_Rect* _destination = new SDL_Rect();
-		_destination->x = dst.x;
-		_destination->y = dst.y;
-		_destination->w = dst.w;
-		_destination->h = dst.h;
+		_destination->x = static_cast<int>(dst.x);
+		_destination->y = static_cast<int>(dst.y);
+		_destination->w = static_cast<int>(dst.w);
+		_destination->h = static_cast<int>(dst.h);
 
 		SDL_Rect* _rect = new SDL_Rect();
 		GetTextureSize(id, &_rect->w, &_rect->h);
@@ -167,8 +167,8 @@ void SDLGraphics::DrawString(const std::string& text, size_t fontId, float x, fl
 	if (m_FontMap.count(fontId) > 0)
 	{
 		SDL_Rect* _destination = new SDL_Rect();
-		_destination->x = x;
-		_destination->y = y;
+		_destination->x = static_cast<int>(x);
+		_destination->y = static_cast<int>(y);
 		GetTextSize(text,fontId,&_destination->w,&_destination->h);
 		SDL_Color* _color = new SDL_Color();
 		_color->r = color.red;
@@ -176,8 +176,8 @@ void SDLGraphics::DrawString(const std::string& text, size_t fontId, float x, fl
 
 		TTF_Font* _font = m_FontMap[fontId];
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), *_color);
-		g_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
-		SDL_RenderCopy(m_Renderer, g_TextureBuffer, nullptr, _destination);
+		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
+		SDL_RenderCopy(m_Renderer, m_TextureBuffer, nullptr, _destination);
 		SDL_FreeSurface(_surface);
 	}
 
