@@ -10,8 +10,11 @@ namespace homer
 	public:
 		FileLogger();
 		~FileLogger();
-		virtual void Log(const char* message);
+
+		virtual void LogMessage(const std::string& message) override;
+        virtual void LogError(const std::string& message) override;
+        virtual void LogWarning(const std::string& message) override;
 	private:
-		std::ofstream MyFile;
+		std::ofstream m_LogFile;
 	};
 }

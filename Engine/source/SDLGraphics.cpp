@@ -48,6 +48,7 @@ void SDLGraphics::Shutdown()
 
 void SDLGraphics::SetColor(const Color& color)
 {
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 
 void SDLGraphics::Clear()
@@ -70,18 +71,35 @@ void SDLGraphics::DrawRect(int x, int y, int w, int h, const Color& color)
 
 void SDLGraphics::DrawRect(const RectF& rect, const Color& color)
 {
+	DrawRect(rect.x, rect.y, rect.w, rect.h, color);
 }
 
 void SDLGraphics::FillRect(float x, float y, float w, float h, const Color& color)
 {
+	SDL_Rect _rect = {
+		static_cast<int>(x),
+		static_cast<int>(y),
+	static_cast<int>(w),
+	static_cast<int>(h) };
+
+	SetColor(color);
+
+	SDL_RenderFillRect(m_Renderer, &_rect);
 }
 
 void SDLGraphics::FillRect(const RectF& rect, const Color& color)
 {
+	FillRect(rect.x, rect.y, rect.w, rect.h, color);
 }
 
 void SDLGraphics::DrawLine(float x1, float y1, float x2, float y2, const Color& color)
 {
+	SetColor(color);
+	SDL_RenderDrawLine(m_Renderer,
+		static_cast<int>(x1),
+		static_cast<int>(y1),
+		static_cast<int>(x2),
+		static_cast<int>(y2));
 }
 
 size_t SDLGraphics::LoadTexture(const std::string& filename)
@@ -104,7 +122,33 @@ size_t SDLGraphics::LoadTexture(const std::string& filename)
 
 void SDLGraphics::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
+	SDL_Rect _src = {
+	static_cast<int>(src.x),
+	static_cast<int>(src.y),
+	static_cast<int>(src.w),
+	static_cast<int>(src.h) };
 
+	SDL_Rect _dst = {
+	static_cast<int>(dst.x),
+	static_cast<int>(dst.y),
+	static_cast<int>(dst.w),
+	static_cast<int>(dst.h) };
+
+	int _flip = SDL_FLIP_NONE;
+	if (flip.h)
+	{
+		_flip = SDL_FLIP_HORIZONTAL;
+	}
+
+	if (flip.v)
+	{
+		_flip |= SDL_FLIP_VERTICAL;
+	}
+
+	const SDL_RendererFlip _rf = static_cast<SDL_RendererFlip>(_flip);
+
+	SetColorMode(id, color);
+	SDL_RenderCopyEx(m_Renderer, m_TextureMap[id], &_src, &_dst, angle, nullptr, _rf);
 }
 
 void SDLGraphics::DrawTexture(size_t id, const RectF& dst, const Color& color)
@@ -127,6 +171,8 @@ void SDLGraphics::DrawTexture(size_t id, const RectF& dst, const Color& color)
 
 void SDLGraphics::DrawTexture(size_t id, const Color& color)
 {
+	SetColorMode(id, color);
+	SDL_RenderCopy(m_Renderer, m_TextureMap[id], nullptr, nullptr);
 }
 
 void SDLGraphics::GetTextureSize(size_t id, int* w, int* h)
@@ -195,4 +241,13 @@ void SDLGraphics::GetTextSize(const std::string& text, size_t fontId, int* w, in
 		*w = 0;
 		*h = 0;
 	}
+
+}
+
+void SDLGraphics::SetColorMode(size_t id, const Color& color)
+{
+	SDL_Texture* _tex = m_TextureMap[id];
+	SDL_SetTextureBlendMode(_tex, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(_tex, color.alpha);
+	SDL_SetTextureColorMod(_tex, color.red, color.green, color.blue);
 }

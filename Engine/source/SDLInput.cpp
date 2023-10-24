@@ -13,6 +13,23 @@ void SdlInput::Update()
 		case SDL_QUIT:
 			homer::Engin::Get()->Quit();
 			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			SDL_MouseButtonEvent _buttonDown = _event.button;
+			m_MouseStates[_buttonDown.button] = true;
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+			SDL_MouseButtonEvent _buttonUp = _event.button;
+			m_MouseStates[_buttonUp.button] = true;
+			break;
+
+		case SDL_MOUSEMOTION:
+			SDL_MouseMotionEvent _motion = _event.motion;
+			m_MouseX = _motion.x;
+			m_MouseY = _motion.y;
+			break;
+
 		}
 	}
 	m_KeyStates = SDL_GetKeyboardState(nullptr);
@@ -25,9 +42,11 @@ bool SdlInput::IsKeyDown(int keycode)
 
 bool SdlInput::IsButtonDown(int button)
 {
-    return false;
+	return m_MouseStates[button];
 }
 
 void SdlInput::GetMousePosition(int* x, int* y)
 {
+	*x = m_MouseX;
+	*y = m_MouseY;
 }

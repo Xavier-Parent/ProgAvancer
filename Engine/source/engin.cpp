@@ -8,17 +8,8 @@
 #include "SDLGraphics.h"
 #include "SDLAudio.h"
 
-//static SDL_Renderer* _renderer = NULL;
-//static SDL_Window* _window = NULL;
 
 using namespace homer;
-/// <summary>
-/// Function init where everything is initialise
-/// </summary>
-/// <param name="name"></param>
-/// <param name="w"></param>
-/// <param name="h"></param>
-/// <returns></returns>
 bool Engin::Init(const char* name, int w, int h) {
 	
 	m_Input = new SdlInput();
@@ -35,14 +26,11 @@ bool Engin::Init(const char* name, int w, int h) {
 #endif
 
 #ifdef NDEBUG
-	m_Logger = new FileLogger();
+	m_Logger = new FileLogger("engin.log");
 #endif
 	return true;
 }
-/// <summary>
-/// Function Start with the delta time and the 60 fps
-/// </summary>
-/// <param name=""></param>
+
 void Engin::Start(void) {
 	if (!m_IsInit) {
 		if (!Init("Unknow title",800,600)) {
@@ -52,7 +40,8 @@ void Engin::Start(void) {
 	
 	m_IsRunning = true;
 	clock_t _end = clock();
-	
+	const int TARGET_FPS = 60;
+	const int MS_PER_FRAME = 1000 / TARGET_FPS;
 	while (m_IsRunning) {
 		const clock_t _start = clock();
 		float _dt = (_start - _end) * 0.001f;
@@ -60,10 +49,10 @@ void Engin::Start(void) {
 		Update(_dt);
 		Render();
 
-		float elapse = (_end - _start) * 16.666f * 0.001f;
-		if(elapse > 0)
+		int _restTime = _start + MS_PER_FRAME - clock();
+		if (_restTime > 0)
 		{
-			Sleep(static_cast<DWORD>(elapse));
+			Sleep(_restTime);
 		}
 		_end = _start;
 		
@@ -71,27 +60,25 @@ void Engin::Start(void) {
 	
 	ShutDown();
 }
-/// <summary>
-/// Where the input are call
-/// </summary>
-/// <param name=""></param>
+
 void Engin::ProcessInput(void)
 {
 	m_Input->Update();
+#if _DEBUG
+	if (m_Input->IsKeyDown(41))
+	{
+		Quit();
+	}
+#endif
 }
-
 static float x = 0.0f;
 static float y = 0.0f;
 static float speed = 100;
-/// <summary>
-/// Where everuthing is updated
-/// </summary>
-/// <param name="dt"></param>
+
 void Engin::Update(float dt)
 {
 	if (m_Input->IsKeyDown(7)) {
 		x += speed * dt;
-		m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
 	}
 	if (m_Input->IsKeyDown(4)) {
 		x -= speed * dt;
@@ -102,11 +89,18 @@ void Engin::Update(float dt)
 	if (m_Input->IsKeyDown(22)) {
 		y += speed * dt;
 	}
+
 	if (m_Input->IsKeyDown(42)) {
-		m_Logger->Log("BackSpace");
+		//BackSpace
+		
+		m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
+
 	}
 	if (m_Input->IsKeyDown(44)) {
-		m_Logger->Log("SpaceBar");
+		//Space
+		//m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
+		m_Audio->PlaySFX(m_Audio->LoadSound("assets/Error.mp3"));
+		m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Victory.mp3"));
 	}
 
 #ifdef _DEBUG
@@ -117,10 +111,7 @@ void Engin::Update(float dt)
 #endif
 	
 }
-/// <summary>
-/// Render the texture,string and the rectangle
-/// </summary>
-/// <param name=""></param>
+
 void Engin::Render(void)
 {
 	m_Graphics->Clear();
@@ -136,20 +127,33 @@ void Engin::Render(void)
 
 	m_Graphics->Present();
 }
-/// <summary>
-/// Close the engine
-/// </summary>
+
 void Engin::Quit()
 {
 	m_IsRunning = false;
 }
-/// <summary>
-/// Shutdown everything
-/// </summary>
-/// <param name=""></param>
+
 void Engin::ShutDown(void)
 {
-	m_IsRunning = false;
-	//SDL_DestroyRenderer(m_Renderer);
+	if (m_Input != nullptr)
+	{
+		delete m_Input;
+	}
+
+	if (m_Audio != nullptr)
+	{
+		delete m_Audio;
+	}
+
+	if (m_Graphics != nullptr)
+	{
+		m_Graphics->Shutdown();
+		delete m_Graphics;
+	}
+
+	if (m_Logger != nullptr)
+	{
+		delete m_Logger;
+	}
 	SDL_Quit();
 }

@@ -50,6 +50,7 @@ private:
 	std::map<size_t, SDL_Texture*> m_TextureMap;
 	std::map<size_t, TTF_Font*> m_FontMap;
 
+	void SetColorMode(size_t id, const Color& color);
 	SDL_Renderer* m_Renderer = nullptr;
 	SDL_Window* m_Window = nullptr;
 	SDL_Texture* m_TextureBuffer = nullptr;
