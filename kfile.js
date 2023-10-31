@@ -8,6 +8,8 @@ project.setDebugDir("Deployment");
 
 project.addIncludeDir("Engine/includes");
 
+project.addIncludeDir("TheGame/includes")
+
 project.flatten();
 
 const otherproj = await project.addProject("Engine")

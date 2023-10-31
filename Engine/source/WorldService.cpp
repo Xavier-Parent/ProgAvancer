@@ -7,13 +7,6 @@ WorldService::~WorldService()
 {
 }
 
-
-void WorldService::Add(Entity* entity)
-{
-	m_EntityInWorld.emplace_back(entity);
-	m_EntityMap.emplace(entity->GetName(), entity);
-}
-
 void WorldService::Update(float dt)
 {
 	for (auto entity : m_EntityInWorld)
@@ -23,20 +16,9 @@ void WorldService::Update(float dt)
 }
 
 
-
-
-
 void WorldService::Load(const std::string& scene)
 {
-	if (m_Scenes.count(scene) > 0) {
-		Unload();
-		m_CurrentScene = m_Scenes[scene];
-		m_CurrentScene->Load();
-	}
-}
-
-void WorldService::Unload()
-{
+	//Unload();
 	if (m_CurrentScene != nullptr) {
 		for (auto entity : m_EntityInWorld) {
 			entity->Destroy();
@@ -46,8 +28,11 @@ void WorldService::Unload()
 		m_EntityMap.clear();
 	}
 
+	if (m_Scenes.count(scene) > 0) {
+		m_CurrentScene = m_Scenes[scene];
+		m_CurrentScene->Load();
+	}
 }
-
 
 void WorldService::Register(const std::string& name, IScene* scene)
 {
@@ -67,9 +52,9 @@ Entity* WorldService::Find(const std::string& name)
 Entity* WorldService::Create(const std::string& name)
 {
 	Entity* _e = new Entity(name);
-	Add(_e);
+	m_EntityInWorld.emplace_back(_e);
+	m_EntityMap.emplace(_e->GetName(), _e);
 	return _e;
-	return nullptr;
 }
 
 

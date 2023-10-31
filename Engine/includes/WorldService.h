@@ -2,19 +2,18 @@
 #include "Entity.h"
 #include <map>
 #include "IScene.h"
-class WorldService {
+#include "IWorld.h"
+class WorldService : public IWorld{
 public:
 	WorldService();
 	~WorldService();
 
-	void Add(Entity* entity);
-	void Register(const std::string& name, IScene* scene);
-	void Load(const std::string& scene);
+	virtual void Register(const std::string& name, IScene* scene) override;
+	virtual void Load(const std::string& scene) override;
 	void Update(float dt);
-	void Unload();
-	void Remove(Entity* entity);
-	Entity* Find(const std::string& name);
-	Entity* Create(const std::string& name);
+	virtual void Remove(Entity* entity) override;
+	virtual Entity* Find(const std::string& name) override;
+	virtual Entity* Create(const std::string& name) override;
 
 private:
 	std::map<std::string, IScene*> m_Scenes;

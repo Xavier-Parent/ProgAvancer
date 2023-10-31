@@ -4,6 +4,7 @@
 #include "ILogger.h"
 #include "IGraphics.h"
 #include "IAudio.h"
+#include "IWorld.h"
 
 namespace homer {
 	class Engin final {
@@ -32,6 +33,8 @@ namespace homer {
 		void Start(void);
 		IInput& Input() const { return *m_Input; };
 		ILogger& Logger() const { return *m_Logger; };
+		IWorld& World() const { return *m_World; };
+		
 		/// <summary>
 		/// Close the engine
 		/// </summary>
@@ -60,5 +63,6 @@ namespace homer {
 		ILogger* m_Logger = nullptr;
 		IGraphics* m_Graphics = nullptr;
 		IAudio* m_Audio = nullptr;
+		IWorld* m_World = nullptr;
 	};
 }

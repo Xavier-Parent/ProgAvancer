@@ -7,7 +7,7 @@
 #include "ConsoleLogger.h"
 #include "SDLGraphics.h"
 #include "SDLAudio.h"
-
+#include "WorldService.h"
 
 using namespace homer;
 bool Engin::Init(const char* name, int w, int h) {
@@ -17,7 +17,7 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Graphics = new SDLGraphics();
 	m_Audio = new SDLAudio();
 	m_Graphics->Initialize(name, w, h);
-
+	//m_World = new WorldService();
 	// la music ne marche pas?
 	//m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Coin.wav"));
 

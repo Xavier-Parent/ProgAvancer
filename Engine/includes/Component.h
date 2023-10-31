@@ -1,6 +1,6 @@
 #pragma once
+#include "Entity.h"
 
-class Entity;
 class IUpdatable
 {
 public:
@@ -14,12 +14,18 @@ public:
 	virtual void Draw() = 0;
 };
 
-class Component : public IDrawable, public IUpdatable
+class Component
 {
-public: 
-	virtual ~Component() = default;
-	Component();
-	Component(Entity* parent);
+public:
+	~Component() {}
+
+	Component(Entity* parent) {
+		m_Entity = parent;
+	}
+
+	virtual void Start() = 0;
+	virtual void Destroy() = 0;
 
 protected:
+	Entity* m_Entity;
 };
