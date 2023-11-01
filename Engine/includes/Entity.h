@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
-#include "Component.h"
 #include <vector>
 #include <map>
+#include "Component.h"
 
 class Entity final
 {
