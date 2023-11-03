@@ -29,6 +29,22 @@ public:
 		}
 	}
 
+	template<typename T>
+	T* GetComponent()
+	{
+		const type_info* type = &typeid(T);
+		//componentByType.emplace(type, cmp);
+		if (m_Components.count(type))
+		{
+			T* component = dynamic_cast<m_Components*>(type);
+			if (component != nullptr)
+			{
+				return component;
+			}
+		}
+		return nullptr
+	}
+
 	void Start() {}
 
 	void Update(float dt) {

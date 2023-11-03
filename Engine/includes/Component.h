@@ -17,6 +17,7 @@ public:
 class Component
 {
 public:
+	Component() = default;
 	~Component() {}
 
 	Component(Entity* parent) {
