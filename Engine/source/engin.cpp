@@ -17,9 +17,7 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Graphics = new SDLGraphics();
 	m_Audio = new SDLAudio();
 	m_Graphics->Initialize(name, w, h);
-	//m_World = new WorldService();
-	// la music ne marche pas?
-	//m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Coin.wav"));
+	m_World = new WorldService();
 
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
@@ -121,7 +119,7 @@ void Engin::Render(void)
 	_carre.h = 500;
 	_carre.w = 500;
 
-	m_Graphics->DrawTexture(m_Graphics->LoadTexture("assets/Candle.png"), _carre,Color::Red);
+	m_Graphics->DrawTexture(m_Graphics->LoadTexture("assets/sprite/Candle.png"), _carre,Color::Red);
 	m_Graphics->DrawString("allo", m_Graphics->LoadFont("assets/Happy.ttf",50),60,60,Color::Blue);
 	m_Graphics->DrawRect(static_cast<int>(x), static_cast<int>(y), 100, 100, Color::Red);
 
