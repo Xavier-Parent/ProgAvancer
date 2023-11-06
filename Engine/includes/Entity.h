@@ -25,7 +25,7 @@ public:
 		IDrawable* d_cmp = dynamic_cast<IDrawable*>(cmp);
 		if (d_cmp != nullptr)
 		{
-			m_Updatable[type] = d_cmp;
+			m_Drawable[type] = d_cmp;
 		}
 	}
 
