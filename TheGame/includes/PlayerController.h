@@ -6,6 +6,10 @@ public:
 	 PlayerController();
 	 ~PlayerController();
 
+	 virtual void Update(float dt) override;
+
 
 private:
+	float x;
+	float y;
 };

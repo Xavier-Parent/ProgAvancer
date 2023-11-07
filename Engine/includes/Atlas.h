@@ -8,6 +8,7 @@ public:
 	~Atlas();
 
 	void AddFrame(const std::string& name, int x, int y, int w, int h);
-	void AddFrame(const std::string& name, int x, int y, int w, int h);
+	void SetFrame(const std::string& name);
+
 private:
 };

@@ -31,9 +31,11 @@ namespace homer {
 		/// </summary>
 		/// <param name=""></param>
 		void Start(void);
-		IInput& Input() const { return *m_Input; };
-		ILogger& Logger() const { return *m_Logger; };
-		IWorld& World() const { return *m_World; };
+		IInput& Input() const { return *m_Input; }
+		ILogger& Logger() const { return *m_Logger; }
+		IWorld& World() const { return *m_World; }
+		IGraphics& Graphics() const { return *m_Graphics; }
+
 		
 		/// <summary>
 		/// Close the engine

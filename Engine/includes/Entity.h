@@ -4,14 +4,16 @@
 #include <map>
 #include "Component.h"
 
+
+
 class Entity final
 {
 public:
-	Entity(const std::string& name) : m_Name(name) {}
+	Entity(const std::string& name);
 	~Entity() = default;
 
 	template<typename T>
-	T* AddComponent(){
+	T* AddComponent() {
 		T* cmp = new T();
 		const type_info* type = &typeid(*cmp);
 		m_Components[type] = cmp;
@@ -47,21 +49,17 @@ public:
 
 	void Start() {}
 
-	void Update(float dt) {
-		for (auto c : m_Updatable) {
-			c->Update(dt);
-		}
-	}
-	void Draw() {
-		for (auto c : m_Drawable) {
-			c->Draw();
-		}
-	}
+	void Update(float dt);
+	void Draw();
+	float GetX() { return x; }
+	float GetY() { return y; }
 
 	void Destroy() {}
 	std::string& GetName() { return m_Name; }
 private:
-	std::map<const type_info* , Component*> m_Components;
+	float x;
+	float y;
+	std::map<const type_info*, Component*> m_Components;
 	std::vector<IDrawable*> m_Drawable;
 	std::vector<IUpdatable*> m_Updatable;
 	std::string m_Name;

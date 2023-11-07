@@ -53,8 +53,14 @@ Entity* WorldService::Create(const std::string& name)
 {
 	Entity* _e = new Entity(name);
 	m_EntityInWorld.emplace_back(_e);
-	m_EntityMap.emplace(_e->GetName(), _e);
+	m_EntityMap.emplace(name, _e);
 	return _e;
+}
+
+void WorldService::Draw() {
+	for (auto entity : m_EntityInWorld) {
+		entity->Draw();
+	}
 }
 
 

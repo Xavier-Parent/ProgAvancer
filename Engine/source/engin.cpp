@@ -1,3 +1,4 @@
+#pragma once
 #include "engin.h"
 #include "SDL.h"
 #include <time.h>
@@ -18,6 +19,9 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Audio = new SDLAudio();
 	m_Graphics->Initialize(name, w, h);
 	m_World = new WorldService();
+
+
+
 
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
@@ -75,18 +79,9 @@ static float speed = 100;
 
 void Engin::Update(float dt)
 {
-	if (m_Input->IsKeyDown(7)) {
-		x += speed * dt;
-	}
-	if (m_Input->IsKeyDown(4)) {
-		x -= speed * dt;
-	}
-	if (m_Input->IsKeyDown(26)) {
-		y -= speed * dt;
-	}
-	if (m_Input->IsKeyDown(22)) {
-		y += speed * dt;
-	}
+	m_World->Update(dt);
+
+	
 
 	if (m_Input->IsKeyDown(42)) {
 		//BackSpace
@@ -97,8 +92,8 @@ void Engin::Update(float dt)
 	if (m_Input->IsKeyDown(44)) {
 		//Space
 		//m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
-		m_Audio->PlaySFX(m_Audio->LoadSound("assets/Error.mp3"));
-		m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Victory.mp3"));
+		//m_Audio->PlaySFX(m_Audio->LoadSound("assets/Error.mp3"));
+		//m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Victory.mp3"));
 	}
 
 #ifdef _DEBUG
@@ -118,13 +113,17 @@ void Engin::Render(void)
 	_carre.y = 0;
 	_carre.h = 500;
 	_carre.w = 500;
-
+	/*
 	m_Graphics->DrawTexture(m_Graphics->LoadTexture("assets/sprite/Candle.png"), _carre,Color::Red);
 	m_Graphics->DrawString("allo", m_Graphics->LoadFont("assets/Happy.ttf",50),60,60,Color::Blue);
 	m_Graphics->DrawRect(static_cast<int>(x), static_cast<int>(y), 100, 100, Color::Red);
-
+	*/
+	m_World->Draw();
 	m_Graphics->Present();
+
 }
+
+
 
 void Engin::Quit()
 {
