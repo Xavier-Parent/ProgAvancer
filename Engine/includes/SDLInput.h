@@ -5,7 +5,7 @@ namespace homer {
 	public:
 		virtual ~SdlInput() = default;
 		virtual void Update() override;
-		virtual bool IsKeyDown(int keycode) override;
+		virtual bool IsKeyDown(EKey keycode) override;
 		virtual bool IsButtonDown(int button) override;
 		virtual void GetMousePosition(int* x, int* y) override;
 	private:

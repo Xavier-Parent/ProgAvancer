@@ -4,8 +4,6 @@
 #include <map>
 #include "Component.h"
 
-
-
 class Entity final
 {
 public:
@@ -14,37 +12,35 @@ public:
 
 	template<typename T>
 	T* AddComponent() {
-		T* cmp = new T();
+		T* cmp = new T(this);
 		const type_info* type = &typeid(*cmp);
 		m_Components[type] = cmp;
 
 		IUpdatable* u_cmp = dynamic_cast<IUpdatable*>(cmp);
 		if (u_cmp != nullptr)
 		{
-			m_Updatable[type] = u_cmp;
+			m_Updatable.push_back(u_cmp);
 		}
 
 		IDrawable* d_cmp = dynamic_cast<IDrawable*>(cmp);
 		if (d_cmp != nullptr)
 		{
-			m_Drawable[type] = d_cmp;
+			m_Drawable.push_back(d_cmp);
 		}
+		return cmp;
 	}
 
 	template<typename T>
 	T* GetComponent()
 	{
 		const type_info* type = &typeid(T);
-		//componentByType.emplace(type, cmp);
-		if (m_Components.count(type))
+
+		if (m_Components.count(type) > 0)
 		{
-			T* component = dynamic_cast<m_Components*>(type);
-			if (component != nullptr)
-			{
-				return component;
-			}
+			return static_cast<T*>(m_Components[type]);
 		}
-		return nullptr
+		else
+		return nullptr;
 	}
 
 	void Start() {}
@@ -54,6 +50,7 @@ public:
 	float GetX() { return x; }
 	float GetY() { return y; }
 
+	void SetPosition(float x,float y );
 	void Destroy() {}
 	std::string& GetName() { return m_Name; }
 private:

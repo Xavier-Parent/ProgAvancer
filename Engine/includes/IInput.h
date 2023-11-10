@@ -6,6 +6,18 @@ namespace homer{
 		EKEY_D = 7,
 		EKEY_S = 22,
 		EKEY_W = 26,
+
+		EKEY_1 = 30,
+		EKEY_2 = 31,
+		EKEY_3 = 32,
+		EKEY_4 = 33,
+		EKEY_5 = 34,
+		EKEY_6 = 35,
+		EKEY_7 = 36,
+		EKEY_8 = 37,
+		EKEY_9 = 38,
+		EKEY_0 = 39,
+
 		EKEY_RETURN = 40,
 		EKEY_ESCAPE = 41,
 		EKEY_BACKSPACE = 42,
@@ -21,7 +33,7 @@ namespace homer{
 	{
 	public:
 		virtual ~IInput() = default;
-		virtual bool IsKeyDown(int key) = 0;
+		virtual bool IsKeyDown(EKey key) = 0;
 		virtual bool IsButtonDown(int button) = 0;
 		virtual void GetMousePosition(int* x, int* y) = 0;
 	protected:

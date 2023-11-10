@@ -35,9 +35,14 @@ void SdlInput::Update()
 	m_KeyStates = SDL_GetKeyboardState(nullptr);
 }
 
-bool SdlInput::IsKeyDown(int keycode)
+bool SdlInput::IsKeyDown(EKey keycode)
 {
-	return m_KeyStates[keycode];
+	if (m_KeyStates != nullptr)
+	{
+		return m_KeyStates[static_cast<int>(keycode)] == 1;
+	}
+
+	return false;
 }
 
 bool SdlInput::IsButtonDown(int button)

@@ -71,8 +71,8 @@ void WorldService::Remove(Entity* entity)
 		if (*it == entity)
 		{
 			m_EntityInWorld.erase(it);
+			m_EntityMap.erase(entity->GetName());
 			break;
 		}
 	}
-	m_EntityMap.erase(entity->GetName());
 }

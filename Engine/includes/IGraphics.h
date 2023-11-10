@@ -51,7 +51,7 @@ public:
 
 	virtual size_t LoadTexture(const std::string& filename) = 0;
 
-	virtual void DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color) = 0;
+	virtual void DrawTexture(size_t id, const RectF& src, const RectF& dst, double angle, const Flip& flip, const Color& color) = 0;
 
 	virtual void DrawTexture(size_t id, const RectF& dst, const Color& color) = 0;
 

@@ -18,7 +18,7 @@ class Component
 {
 public:
 	Component() = default;
-	~Component() {}
+	virtual ~Component() = default;
 
 	Component(Entity* parent) {
 		m_Entity = parent;

@@ -9,7 +9,6 @@ void SDLGraphics::DrawLine(int x0, int y0, int x1, int y1)
     SDL_RenderDrawLine(m_Renderer, x0, y0, x1, y1);
 }
 
-
 bool SDLGraphics::Initialize(const std::string& title, int w, int h)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -116,11 +115,10 @@ size_t SDLGraphics::LoadTexture(const std::string& filename)
 		m_TextureMap[id] = _texture;
 	}
 
-	
     return id;
 }
 
-void SDLGraphics::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
+void SDLGraphics::DrawTexture(size_t id, const RectF& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
 	SDL_Rect _src = {
 	static_cast<int>(src.x),
@@ -153,7 +151,6 @@ void SDLGraphics::DrawTexture(size_t id, const RectI& src, const RectF& dst, dou
 
 void SDLGraphics::DrawTexture(size_t id, const RectF& dst, const Color& color)
 {
-	
 	if (m_TextureMap.count(id) > 0)
 	{
 		SDL_Rect* _destination = new SDL_Rect();
@@ -166,7 +163,6 @@ void SDLGraphics::DrawTexture(size_t id, const RectF& dst, const Color& color)
 		GetTextureSize(id, &_rect->w, &_rect->h);
 		SDL_RenderCopy(m_Renderer, m_TextureMap[id],_rect ,_destination );
 	}
-
 }
 
 void SDLGraphics::DrawTexture(size_t id, const Color& color)

@@ -32,7 +32,7 @@ public:
 
 	virtual size_t LoadTexture(const std::string& filename) override;
 
-	virtual void DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color) override;
+	virtual void DrawTexture(size_t id, const RectF& src, const RectF& dst, double angle, const Flip& flip, const Color& color) override;
 
 	virtual void DrawTexture(size_t id, const RectF& dst, const Color& color) override;
 

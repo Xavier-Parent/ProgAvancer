@@ -20,9 +20,6 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Graphics->Initialize(name, w, h);
 	m_World = new WorldService();
 
-
-
-
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
 #endif
@@ -56,10 +53,8 @@ void Engin::Start(void) {
 		{
 			Sleep(_restTime);
 		}
-		_end = _start;
-		
+		_end = _start;	
 	}
-	
 	ShutDown();
 }
 
@@ -67,7 +62,17 @@ void Engin::ProcessInput(void)
 {
 	m_Input->Update();
 #if _DEBUG
-	if (m_Input->IsKeyDown(41))
+	if (m_Input->IsKeyDown(EKey::EKEY_2))
+	{
+		m_World->Load("Game Scene");
+	}
+	if (m_Input->IsKeyDown(EKey::EKEY_1))
+	{
+		m_World->Load("Title Scene");
+	}
+
+
+	if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
 	{
 		Quit();
 	}
@@ -81,46 +86,19 @@ void Engin::Update(float dt)
 {
 	m_World->Update(dt);
 
-	
-
-	if (m_Input->IsKeyDown(42)) {
-		//BackSpace
-		
-		m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
-
-	}
-	if (m_Input->IsKeyDown(44)) {
-		//Space
-		//m_Audio->PlaySFX(m_Audio->LoadSound("assets/Coin.wav"));
-		//m_Audio->PlaySFX(m_Audio->LoadSound("assets/Error.mp3"));
-		//m_Audio->PlayMusic(m_Audio->LoadMusic("assets/Victory.mp3"));
-	}
-
 #ifdef _DEBUG
-	if (m_Input->IsKeyDown(41))
+	if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
 	{
 		ShutDown();
 	}
-#endif
-	
+#endif	
 }
 
 void Engin::Render(void)
 {
 	m_Graphics->Clear();
-	RectF _carre;
-	_carre.x = 0;
-	_carre.y = 0;
-	_carre.h = 500;
-	_carre.w = 500;
-	/*
-	m_Graphics->DrawTexture(m_Graphics->LoadTexture("assets/sprite/Candle.png"), _carre,Color::Red);
-	m_Graphics->DrawString("allo", m_Graphics->LoadFont("assets/Happy.ttf",50),60,60,Color::Blue);
-	m_Graphics->DrawRect(static_cast<int>(x), static_cast<int>(y), 100, 100, Color::Red);
-	*/
 	m_World->Draw();
 	m_Graphics->Present();
-
 }
 
 
