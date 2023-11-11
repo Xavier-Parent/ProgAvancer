@@ -32,9 +32,27 @@ namespace homer{
 	class IInput
 	{
 	public:
+		/// <summary>
+		/// Destructor by default
+		/// </summary>
 		virtual ~IInput() = default;
+		/// <summary>
+		/// Function to recognise the key pressed on the keyboard
+		/// </summary>
+		/// <param name="key">The name of the key that is pressed</param>
+		/// <returns></returns>
 		virtual bool IsKeyDown(EKey key) = 0;
+		/// <summary>
+		/// Function to recognise the mouse button
+		/// </summary>
+		/// <param name="button">Button of the mouse that is pressed</param>
+		/// <returns></returns>
 		virtual bool IsButtonDown(int button) = 0;
+		/// <summary>
+		/// Function to get the mouse position in the scene
+		/// </summary>
+		/// <param name="x">Horizontal position of the mouse</param>
+		/// <param name="y">Vertical position of the mouse</param>
 		virtual void GetMousePosition(int* x, int* y) = 0;
 	protected:
 

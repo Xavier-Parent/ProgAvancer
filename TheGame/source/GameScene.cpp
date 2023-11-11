@@ -6,14 +6,15 @@
 using namespace homer;
 void GameScene::Load()
 {
-	Entity* BackGround = Engin::Get()->World().Create("BackGround");
+	Entity* pacMan = Engin::Get()->World().Create("pacMan");
 	Animation* animation;
-	animation = BackGround->AddComponent<Animation>();
-	animation->InitAnimation("assets/sprite/pacman1.png", 14, 4, 16, 16);
+	animation = pacMan->AddComponent<Animation>();
+	pacMan->AddComponent<PlayerController>();
+	animation->InitAnimation("assets/sprite/pacman.png", 14, 4, 16, 16);
 	animation->AddClip("Right", 0, 3, 0.3f);
-	animation->Play("Right", true);
-
-	
-	//BackGround->AddComponent<Animation>()->InitAnimation("assets/sprite/pacman9.png", 1, 18,18);
-
+	animation->AddClip("Left", 14, 3, 0.3f);
+	animation->AddClip("Up", 28, 3, 0.3f);
+	animation->AddClip("Down", 42, 3, 0.3f);
+	animation->AddClip("Dead", 4, 10, 0.2f);
+	animation->Play("Dead", true);	
 }

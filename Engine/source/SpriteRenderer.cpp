@@ -6,6 +6,10 @@ using namespace homer;
 SpriteRenderer::SpriteRenderer(Entity* entity)
 	:Component(entity)
 {
+	h = 0;
+	w = 0;
+	id = 0;
+	square = RectF();
 }
 
 SpriteRenderer::~SpriteRenderer()

@@ -4,6 +4,8 @@ using namespace homer;
 Atlas::Atlas(Entity* entity)
 	:SpriteRenderer(entity)
 {
+	frame = RectF();
+	id = 0;
 }
 
 Atlas::~Atlas()
@@ -20,7 +22,7 @@ void Atlas::Draw()
 	Engin::Get()->Graphics().DrawTexture(id, frame, square, 0, Flip(),  Color::Red);
 }
 
-void Atlas::AddFrame(const std::string& name, int x, int y, int w, int h)
+void Atlas::AddFrame(const std::string& name, float x, float y, float w, float h)
 {
 	RectF rect{ x,y,h,w };
 	frameMap[name] = rect;

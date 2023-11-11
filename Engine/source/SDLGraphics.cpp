@@ -70,7 +70,7 @@ void SDLGraphics::DrawRect(int x, int y, int w, int h, const Color& color)
 
 void SDLGraphics::DrawRect(const RectF& rect, const Color& color)
 {
-	DrawRect(rect.x, rect.y, rect.w, rect.h, color);
+	DrawRect(static_cast<int>(rect.x), static_cast<int>(rect.y), static_cast<int>(rect.w), static_cast<int>(rect.h), color);
 }
 
 void SDLGraphics::FillRect(float x, float y, float w, float h, const Color& color)

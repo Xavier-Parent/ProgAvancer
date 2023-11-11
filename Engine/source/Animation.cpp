@@ -3,6 +3,15 @@
 using namespace homer;
 Animation::Animation(Entity* entity) : SpriteRenderer(entity)
 {
+	id = 0;
+	frame = RectF();
+	currentClip = Clip();
+	delay = 0;
+	index = 0;
+	columns = 0;
+	rows = 0;
+	loop = false;
+	timer = 0;
 }
 
 Animation::~Animation()
@@ -14,8 +23,8 @@ void Animation::InitAnimation(const std::string& filename, int frameInRows, int 
 	id = Engin::Get()->Graphics().LoadTexture(filename);
 	rows = frameInColumns;
 	columns = frameInRows;
-	frame.w = frameWidth;
-	frame.h = frameHeight;
+	frame.w = static_cast<float>(frameWidth);
+	frame.h = static_cast<float>(frameHeight);
 }
 
 void Animation::AddClip(const std::string& name, int start, int count, float delay)
@@ -24,9 +33,10 @@ void Animation::AddClip(const std::string& name, int start, int count, float del
 	clipMap[name] = clip;
 	this->delay = delay;
 }
-float timer = 0;
+
 void Animation::Update(float dt)
 {
+
 	timer += dt;
 	if (timer > delay)
 	{
@@ -35,6 +45,9 @@ void Animation::Update(float dt)
 		if (index >= currentClip._start + currentClip._count)
 		{
 			index = currentClip._start;
+			if (!loop) {
+				Stop();
+			}
 		}
 
 		frame.x = (index % columns) * frame.w;
@@ -55,16 +68,22 @@ void Animation::Draw()
 
 void Animation::Stop()
 {
-
 }
 
 void Animation::Play(const std::string& name, bool loop)
 {
+	if (clipMap[name]._start == currentClip._start)
+	{
+		return;
+	}
 	if (clipMap.count(name) > 0)
 	{
+
 		currentClip = clipMap[name];
 		index = currentClip._start;
 		frame.x = (index % columns) * frame.w;
 		frame.y = (index / columns) * frame.h;
+		this->loop = loop;
+
 	}
 }

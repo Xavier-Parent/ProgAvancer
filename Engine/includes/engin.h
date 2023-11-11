@@ -9,6 +9,10 @@
 namespace homer {
 	class Engin final {
 	public:
+		/// <summary>
+		/// Singleton of the engine
+		/// </summary>
+		/// <returns></returns>
 		static Engin* Get()
 		{
 			static Engin* m_Instance;
