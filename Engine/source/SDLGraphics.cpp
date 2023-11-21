@@ -118,7 +118,7 @@ size_t SDLGraphics::LoadTexture(const std::string& filename)
     return id;
 }
 
-void SDLGraphics::DrawTexture(size_t id, const RectF& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
+void SDLGraphics::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
 	SDL_Rect _src = {
 	static_cast<int>(src.x),

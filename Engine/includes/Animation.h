@@ -8,6 +8,7 @@ class Animation : public SpriteRenderer, public IUpdatable
 	struct Clip {
 		int _start;
 		int _count;
+		float _delay;
 	};
 
 
@@ -64,10 +65,9 @@ public:
 
 private:
 	size_t id;
-	RectF frame;
+	RectI frame;
 	Clip currentClip;
 	std::map<const std::string, Clip> clipMap;
-	float delay;
 	float timer;
 	int index;
 	int columns;

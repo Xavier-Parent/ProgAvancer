@@ -4,9 +4,8 @@ using namespace homer;
 Animation::Animation(Entity* entity) : SpriteRenderer(entity)
 {
 	id = 0;
-	frame = RectF();
+	frame = RectI();
 	currentClip = Clip();
-	delay = 0;
 	index = 0;
 	columns = 0;
 	rows = 0;
@@ -23,22 +22,20 @@ void Animation::InitAnimation(const std::string& filename, int frameInRows, int 
 	id = Engin::Get()->Graphics().LoadTexture(filename);
 	rows = frameInColumns;
 	columns = frameInRows;
-	frame.w = static_cast<float>(frameWidth);
-	frame.h = static_cast<float>(frameHeight);
+	frame.w = frameWidth;
+	frame.h = frameHeight;
 }
 
 void Animation::AddClip(const std::string& name, int start, int count, float delay)
 {
-	Clip clip{ start , count };
+	Clip clip{ start , count, delay };
 	clipMap[name] = clip;
-	this->delay = delay;
 }
 
 void Animation::Update(float dt)
 {
-
 	timer += dt;
-	if (timer > delay)
+	if (timer > currentClip._delay)
 	{
 		timer = 0;
 		index++;

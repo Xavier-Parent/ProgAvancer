@@ -2,10 +2,10 @@
 
 
 Entity::Entity(const std::string& name)
-	:x (0), y (0), m_Name(name)
+	:X (0), Y (0), m_Name(name)
 {
-	x = 0;
-	y = 0;
+	X = 0;
+	Y = 0;
 }
 
 void Entity::Update(float dt)
@@ -23,8 +23,8 @@ void Entity::Draw()
 	}
 }
 
-void Entity::SetPosition(float X, float Y)
+void Entity::SetPosition(float x, float y)
 {
-	x = X;
-	y = Y;
+	X = x;
+	Y = y;
 }

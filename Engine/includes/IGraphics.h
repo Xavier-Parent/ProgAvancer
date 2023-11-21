@@ -119,7 +119,7 @@ public:
 	/// <param name="angle">the angle of the texture</param>
 	/// <param name="flip">the side of the texture if it is flip or not</param>
 	/// <param name="color">the color of the texture</param>
-	virtual void DrawTexture(size_t id, const RectF& src, const RectF& dst, double angle, const Flip& flip, const Color& color) = 0;
+	virtual void DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color) = 0;
 	/// <summary>
 	/// function to draw a texture using a prefab of a rect an Id and a color
 	/// </summary>

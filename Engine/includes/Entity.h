@@ -74,21 +74,32 @@ public:
 	/// Function to return the position Horizontal of the Entity
 	/// </summary>
 	/// <returns>Return the X value</returns>
-	float GetX() { return x; }
+	float GetX() { return X; }
 	/// <summary>
 	/// Function to return the Vertical Position of the entity
 	/// </summary>
 	/// <returns>Return the Y value</returns>
-	float GetY() { return y; }
+	float GetY() { return Y; }
 	/// <summary>
 	/// Function to set the position of the entity in the world
 	/// </summary>
 	/// <param name="x">Set the X position who is the Horizontal value</param>
 	/// <param name="y">Set the Y position who is the Vertical value</param>
 	void SetPosition(float x,float y );
+	void GetPosition(float* x, float* y)
+	{
+		*x = X;
+		*y = Y;
+	}
+	void GetSize(float* w, float* h)
+	{
+		*w = m_Width;
+		*h = m_Height;
+	}
 	/// <summary>
 	/// Destroy the Entity
 	/// </summary>
+	/// 
 	void Destroy() {}
 	/// <summary>
 	/// Function to get the name of the Entity
@@ -96,8 +107,10 @@ public:
 	/// <returns>Return the name of the Entity</returns>
 	std::string& GetName() { return m_Name; }
 private:
-	float x;
-	float y;
+	float X;
+	float Y;
+	float m_Width = 1.0f;
+	float m_Height = 1.0f;
 	std::map<const type_info*, Component*> m_Components;
 	std::vector<IDrawable*> m_Drawable;
 	std::vector<IUpdatable*> m_Updatable;
