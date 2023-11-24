@@ -75,12 +75,10 @@ void Animation::Play(const std::string& name, bool loop)
 	}
 	if (clipMap.count(name) > 0)
 	{
-
 		currentClip = clipMap[name];
 		index = currentClip._start;
 		frame.x = (index % columns) * frame.w;
 		frame.y = (index / columns) * frame.h;
 		this->loop = loop;
-
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-//using namespace homer;
 class Entity;
 class ICollider
 {

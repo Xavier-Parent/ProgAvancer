@@ -9,7 +9,7 @@
 #include "SDLGraphics.h"
 #include "SDLAudio.h"
 #include "WorldService.h"
-
+#include "SpriteRenderer.h"
 using namespace homer;
 bool Engin::Init(const char* name, int w, int h) {
 	
@@ -19,7 +19,6 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_Audio = new SDLAudio();
 	m_Graphics->Initialize(name, w, h);
 	m_World = new WorldService();
-
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
 #endif
@@ -36,7 +35,6 @@ void Engin::Start(void) {
 			return;
 		}
 	}
-	
 	m_IsRunning = true;
 	clock_t _end = clock();
 	const int TARGET_FPS = 60;
@@ -47,7 +45,6 @@ void Engin::Start(void) {
 		ProcessInput();
 		Update(_dt);
 		Render();
-
 		int _restTime = _start + MS_PER_FRAME - clock();
 		if (_restTime > 0)
 		{
@@ -68,9 +65,11 @@ void Engin::ProcessInput(void)
 	}
 	if (m_Input->IsKeyDown(EKey::EKEY_1))
 	{
-		m_World->Load("Title Scene");
-	}
+		//m_Graphics->FillRect(100, 100, 10, 10, Color::Red);
 
+		Entity* pacMan = m_World->Create("pacMan");
+		pacMan->AddComponent<SpriteRenderer>()->Init("assets/sprite/pacman1.png", 500, 500);
+	}
 
 	if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
 	{
@@ -100,8 +99,6 @@ void Engin::Render(void)
 	m_World->Draw();
 	m_Graphics->Present();
 }
-
-
 
 void Engin::Quit()
 {

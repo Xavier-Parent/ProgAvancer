@@ -62,7 +62,6 @@ void Collider::AddToLayer(const std::string& layerName, Entity* entity)
 bool Collider::CollideWithLayer(Entity* entity, const std::string& layerName, Entity** other)
 {
     *other = nullptr;
-
     if (m_Layers.count(layerName) > 0)
     {
         float r1x, r1y, r1w, r1h;

@@ -5,7 +5,7 @@
 #include "IGraphics.h"
 #include "IAudio.h"
 #include "IWorld.h"
-
+#include "ICollider.h"
 namespace homer {
 	class Engin final {
 	public:
@@ -35,12 +35,12 @@ namespace homer {
 		/// </summary>
 		/// <param name=""></param>
 		void Start(void);
+		IAudio& Audio() const { return *m_Audio;  }
 		IInput& Input() const { return *m_Input; }
 		ILogger& Logger() const { return *m_Logger; }
 		IWorld& World() const { return *m_World; }
 		IGraphics& Graphics() const { return *m_Graphics; }
-
-		
+		ICollider& Collider() const { return *m_Collider; }
 		/// <summary>
 		/// Close the engine
 		/// </summary>
@@ -70,5 +70,6 @@ namespace homer {
 		IGraphics* m_Graphics = nullptr;
 		IAudio* m_Audio = nullptr;
 		IWorld* m_World = nullptr;
+		ICollider* m_Collider = nullptr;
 	};
 }

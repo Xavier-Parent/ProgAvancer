@@ -37,6 +37,7 @@ public:
 	/// <param name="w">The width of the sprite</param>
 	/// <param name="h">Height of the sprite</param>
 	void Init(const std::string& filename,float w ,float h);
+	void InitText(const std::string& fontfilename, float fontSize);
 private:
 	size_t id;
 	RectF square;

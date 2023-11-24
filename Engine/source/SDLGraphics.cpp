@@ -36,7 +36,7 @@ bool SDLGraphics::Initialize(const std::string& title, int w, int h)
 	}
 
     TTF_Init();
-    return false;
+    return true;
 }
 
 void SDLGraphics::Shutdown()
@@ -183,7 +183,6 @@ void SDLGraphics::GetTextureSize(size_t id, int* w, int* h)
 		*w = 0;
 		*h = 0;
 	}
-
 }
 
 size_t SDLGraphics::LoadFont(const std::string& filename, int fontSize)
@@ -199,8 +198,6 @@ size_t SDLGraphics::LoadFont(const std::string& filename, int fontSize)
 	{
 		m_FontMap[id] = _font;
 	}
-
-
 	return id;
 }
 
@@ -214,15 +211,12 @@ void SDLGraphics::DrawString(const std::string& text, size_t fontId, float x, fl
 		GetTextSize(text,fontId,&_destination->w,&_destination->h);
 		SDL_Color* _color = new SDL_Color();
 		_color->r = color.red;
-
-
 		TTF_Font* _font = m_FontMap[fontId];
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), *_color);
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
 		SDL_RenderCopy(m_Renderer, m_TextureBuffer, nullptr, _destination);
 		SDL_FreeSurface(_surface);
 	}
-
 }
 
 void SDLGraphics::GetTextSize(const std::string& text, size_t fontId, int* w, int* h)
@@ -237,7 +231,6 @@ void SDLGraphics::GetTextSize(const std::string& text, size_t fontId, int* w, in
 		*w = 0;
 		*h = 0;
 	}
-
 }
 
 void SDLGraphics::SetColorMode(size_t id, const Color& color)
