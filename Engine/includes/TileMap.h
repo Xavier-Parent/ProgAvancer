@@ -22,7 +22,7 @@ public:
     void Load(const std::string& filename, int mapW, int mapH, int tileW, int tileH);
     void AddLayer(const std::string& layer, TLayer tiles);
     TLayer GetLayer(const std::string& name);
-    bool IsColliding(const std::string& layer, float x, float y, float w, float h, int* tileIndex);
+    bool IsColliding(const std::string& layer, Entity* entity, int* tileIndex);
 
 private:
     TTilemap m_Tilemap;
@@ -32,5 +32,5 @@ private:
     int m_TileWidth = 0;
     int m_TileHeight = 0;
     TTileset m_Tileset;
-    float m_ScaleFactor = 2.85f;
+    float m_ScaleFactor = 2.875f;
 };

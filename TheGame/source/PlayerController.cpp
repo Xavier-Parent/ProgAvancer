@@ -6,6 +6,9 @@ PlayerController::PlayerController(Entity* entity)
 {
     x = 0;
     y = 0;
+    tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
+	animation = m_Entity->GetComponent<Animation>();
+    
 }
 
 PlayerController::~PlayerController()
@@ -17,7 +20,6 @@ void PlayerController::Update(float dt)
 	x = m_Entity->GetX();
 	y = m_Entity->GetY();
 	//Atlas* atlas = m_Entity->GetComponent<Atlas>();
-	Animation* animation = m_Entity->GetComponent<Animation>();
 
     if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_D)) {
         x += 100 * dt;
@@ -58,10 +60,17 @@ void PlayerController::Update(float dt)
 		spawn = false;
 	}
 	m_Entity->SetPosition(x, y);
+    int penis;
+    tileMap->IsColliding("Collectable", m_Entity, &penis);
+    tileMap->IsColliding("Wall", m_Entity, &penis);
+
+
+
 }
 
 void PlayerController::Start()
 {
+
 }
 
 void PlayerController::Destroy()

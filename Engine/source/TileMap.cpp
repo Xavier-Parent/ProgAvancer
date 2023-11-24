@@ -1,5 +1,6 @@
 #include "TileMap.h"
 #include "engin.h"
+#include "BoxCollider.h"
 //#include <iostream>
 #include <fstream>
 #include <sstream>
@@ -143,28 +144,43 @@ int Clamp(int value, const int min, const int max)
 	return value;
 }
 
-bool Tilemap::IsColliding(const std::string& layer, float x, float y, float w, float h, int* tileIndex)
+bool Tilemap::IsColliding(const std::string& layer, Entity* entity, int* tileIndex)
 {
-	const int tLeftTile = Clamp(static_cast<int>(x / m_TileWidth), 0, m_Width);
-	const int tRightTile = Clamp(static_cast<int>((x + w) / m_TileWidth), 0, m_Width);
-	const int tTopTile = Clamp(static_cast<int>(y / m_TileHeight), 0, m_Height);
-	const int tBottomTile = Clamp(static_cast<int>((y + h) / m_TileHeight), 0, m_Height);
+	float x = entity->GetX() + 8;
+	float y = entity->GetY() + 8;
+
+	//prendre le w et h du joueur
+	float w = entity->GetComponent<BoxCollider>()->GetW();
+	float h = entity->GetComponent<BoxCollider>()->GetH();
+
+	const int tLeftTile = Clamp(static_cast<int>(x / (m_TileWidth * m_ScaleFactor)), 0, m_Width);
+	const int tRightTile = Clamp(static_cast<int>((x + w) /( m_TileWidth * m_ScaleFactor)), 0, m_Width);
+	const int tTopTile = Clamp(static_cast<int>(y /( m_TileHeight * m_ScaleFactor)), 0, m_Height);
+	const int tBottomTile = Clamp(static_cast<int>((y + h) /( m_TileHeight * m_ScaleFactor)), 0, m_Height);
 
 	for (int i = tLeftTile; i <= tRightTile; i++)
 	{
 		for (int j = tTopTile; j <= tBottomTile; j++)
 		{
-			if (i < m_Width && j < m_Height)
+			if (i < m_Width / m_TileWidth && j < m_Height / m_TileHeight)
 			{
-				if (m_Tilemap[layer][j][i] != 0)
+				if (m_Tilemap[layer][j][i] != -1)
 				{
 					*tileIndex = m_Tilemap[layer][j][i];
+					if (m_Tilemap[layer] == (m_Tilemap["Collectable"]))
+					{
+						m_Tilemap[layer][j][i] = -1;
+					}
+					if (m_Tilemap[layer] == (m_Tilemap["Wall"]))
+					{
+						std::cout << "Allo";
+					}
 					return true;
 				}
 			}
 		}
 	}
 
-	*tileIndex = -1;
+	//*tileIndex = -1;
 	return false;
 }

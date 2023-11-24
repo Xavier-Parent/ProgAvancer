@@ -106,7 +106,7 @@ public:
 	/// </summary>
 	/// <returns>Return the name of the Entity</returns>
 	std::string& GetName() { return m_Name; }
-private:
+protected:
 	float X;
 	float Y;
 	float m_Width = 1.0f;

@@ -58,8 +58,8 @@ void Animation::Draw()
 	RectF square = RectF();
 	square.x = m_Entity->GetX();
 	square.y = m_Entity->GetY();
-	square.h = frame.h * 10;
-	square.w = frame.w * 10;
+	square.h = frame.h * 2;
+	square.w = frame.w * 2;
 	Engin::Get()->Graphics().DrawTexture(id, frame, square, 0, Flip(), Color::Red);
 }
 

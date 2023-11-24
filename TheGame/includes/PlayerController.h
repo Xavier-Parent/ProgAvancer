@@ -1,7 +1,8 @@
 #include "Component.h"
 #include "Atlas.h"
 #include "Animation.h"
-#include"engin.h"
+#include "engin.h"
+#include "TileMap.h"
 class PlayerController : public Component , public IUpdatable{
 
 public:
@@ -34,4 +35,5 @@ private:
 	float y;
 	Atlas* atlas = nullptr;
 	Animation* animation = nullptr;
+	Tilemap* tileMap = nullptr;
 };
