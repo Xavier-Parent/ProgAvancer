@@ -4,11 +4,13 @@ using namespace homer;
 PlayerController::PlayerController(Entity* entity)
 	:Component(entity)
 {
-    x = 0;
-    y = 0;
-    tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
+	x = m_Entity->GetX();
+	y = m_Entity->GetY();
+	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
 	animation = m_Entity->GetComponent<Animation>();
-    
+	speedx = 100;
+	speedy = 100;
+	
 }
 
 PlayerController::~PlayerController()
@@ -17,52 +19,50 @@ PlayerController::~PlayerController()
 
 void PlayerController::Update(float dt)
 {
-	x = m_Entity->GetX();
-	y = m_Entity->GetY();
+
+	int penis;
+	float oldx = x;
 	//Atlas* atlas = m_Entity->GetComponent<Atlas>();
 
-    if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_D)) {
-        x += 100 * dt;
-        // atlas->SetFrame("1");
-        animation->Play("Right", true);
-    }
-
-    if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_A)) {
-        x -= 100 * dt;
-        // atlas->SetFrame("2");
-        animation->Play("Left", true);
-    }
-
-    if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_W)) {
-        y -= 100 * dt;
-        // atlas->SetFrame("3");
-        animation->Play("Up", true);
-    }
-
-    if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_S)) {
-        y += 100 * dt;
-        // atlas->SetFrame("4");
-        animation->Play("Down", true);
-    }
-
-	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_SPACE)) {
-		animation->Play("Dead", true);
-		if (spawn == false)
+	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_D)) {
+		x += speedx * dt;
+		animation->Play("Right", true);
+		if (tileMap->IsColliding("Wall", m_Entity, &penis))
 		{
-			Entity* ghost = Engin::Get()->World().Create("ghost");
-			ghost->AddComponent<SpriteRenderer>()->Init("assets/sprite/pacman3.png", 50, 50);
-			spawn = true;
+			x = oldx - 1;
+			
 		}
 	}
-
-	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_BACKSPACE)) {
-		Engin::Get()->World().Remove(Engin::Get()->World().Find("ghost"));
-		spawn = false;
+	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_A)) {
+		x -= speedx * dt;
+		animation->Play("Left", true);
+		if (tileMap->IsColliding("Wall", m_Entity, &penis))
+		{
+			x = oldx + 1;
+		}
+	}
+	float oldy = y;
+	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_W)) {
+		y -= speedy * dt;
+		animation->Play("Up", true);
+		if (tileMap->IsColliding("Wall", m_Entity, &penis))
+		{
+			y = oldy + 1;
+		}
+	}
+	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_S) && hit == false) {
+		y += speedy * dt;
+		animation->Play("Down", true);
+		if (tileMap->IsColliding("Wall", m_Entity, &penis))
+		{
+			y = oldy - 1;
+			hit = true;
+		}
 	}
 	m_Entity->SetPosition(x, y);
-    int penis;
-    tileMap->IsColliding("Collectable", m_Entity, &penis);
-    tileMap->IsColliding("Wall", m_Entity, &penis);
+
+	tileMap->IsColliding("Collectable", m_Entity, &penis);
+	//tileMap->IsColliding("Wall", m_Entity, &penis);
 
 
 

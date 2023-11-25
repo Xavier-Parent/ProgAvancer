@@ -31,6 +31,9 @@ public:
 
 private:
 	bool spawn = false;
+	bool hit = false;
+	float speedx;
+	float speedy;
 	float x;
 	float y;
 	Atlas* atlas = nullptr;
