@@ -1,7 +1,7 @@
 #include "Component.h"
 #include <math.h>
 #include "engin.h"
-class BoxCollider : public Component , public IDrawable
+class BoxCollider : public Component, public IDrawable
 {
 public:
 	BoxCollider() = default;
@@ -23,8 +23,11 @@ public:
 	bool CheckPointRect(float px, float py, float rx, float ry, float rw, float rh);
 	bool CheckRectCircle(float rx, float ry, float rw, float rh, float cx, float cy, float cr);
 
+	void AddToLayer(const std::string& layerName, Entity* entity);
+	bool CollideWithLayer(Entity* entity, const std::string& layerName, Entity** other);
+
 private:
 	float height;
 	float width;
-
+	std::map<std::string, std::vector<Entity*>> m_Layers;
 };

@@ -2,7 +2,8 @@
 #include "Animation.h"
 #include "engin.h"
 #include "TileMap.h"
-class Enemy : public Component, public IUpdatable {
+#include "Observer.h"
+class Enemy : public Component, public IUpdatable, public Observer<bool> {
 
 	enum class MovementState {
 		IDLE,
@@ -22,7 +23,7 @@ public:
 	/// Destructor
 	/// </summary>
 	~Enemy();
-
+	virtual void OnNotify(const bool& value);
 	/// <summary>
 	/// Function Start
 	/// </summary>
@@ -42,11 +43,15 @@ public:
 private:
 	bool powerUp;
 	float enemySpeed;
+	float normalSpeed;
+	float weakenSpeed;
 	float x, y;
 	bool goUp;
 	bool goDown;
 	bool goRight;
 	bool goLeft;
+
+	bool isWeak;
 
 	int colIndex;
 	int colX;

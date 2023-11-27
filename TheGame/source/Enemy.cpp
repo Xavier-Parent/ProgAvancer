@@ -6,17 +6,26 @@ Enemy::Enemy(Entity* entity)
 {
 	x = 44;
 	y = 40;
-	enemySpeed = 125;
 	animation = m_Entity->GetComponent<Animation>();
 	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
 	goUp = false;
 	goDown = false;
 	goRight = false;
 	goLeft = false;
+	powerUp = false;
+	normalSpeed = 125;
+	weakenSpeed = 50;
+	enemySpeed = 125;
 }
 
 Enemy::~Enemy()
 {
+}
+
+void Enemy::OnNotify(const bool& value)
+{
+	std::cout << "Health : " << value << std::endl;
+	powerUp = !powerUp;
 }
 
 void Enemy::Start()
@@ -37,6 +46,15 @@ void Enemy::Update(float dt)
 
 	MovementState newMovementState = currentMovementState;
 	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
+
+	if (powerUp == true)
+	{
+		enemySpeed = weakenSpeed;
+	}
+	else
+	{
+		enemySpeed = normalSpeed;
+	}
 
 	if (collisionDirection != EDirections::NONE) {
 		ChooseRandomDirection();
@@ -112,7 +130,6 @@ void Enemy::Destroy()
 
 void Enemy::CheckCollision()
 {
-	std::cout << goRight;
 	if (tileMap->IsColliding("Wall", upCollider, &colIndex, &colX, &colY))
 	{
 		goUp = false;

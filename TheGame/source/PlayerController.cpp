@@ -23,8 +23,7 @@ PlayerController::PlayerController(Entity* entity)
 
 }
 
-
-
+int collectable;
 void PlayerController::CheckCollision()
 {
 	if (tileMap->IsColliding("Wall", upCollider, &colIndex, &colX, &colY))
@@ -59,11 +58,12 @@ void PlayerController::CheckCollision()
 	{
 		goLeft = true;
 	}
-
 	EDirections dir = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
 
 	if (tileMap->IsColliding("Collectable", m_Entity, &colIndex, &colX, &colY))
 	{
+		collectable++;
+		OnEatDot.Invoke(collectable);
 		size_t currentSoundId = soundIds[currentSoundIndex];
 		Engin::Get()->Audio().PlaySFX(currentSoundId);
 		currentSoundIndex = (currentSoundIndex + 1) % soundIds.size();
@@ -94,21 +94,27 @@ void PlayerController::CheckCollision()
 PlayerController::~PlayerController()
 {
 }
+
 float powerUpTime = 6;
 float timer = 0;
+bool testBool;
 
 void PlayerController::Update(float dt)
 {
+
 	x = m_Entity->GetX();
 	y = m_Entity->GetY();
 	if (powerUp == true)
 	{
+		OnStateChanged.Invoke(powerUp);
 		animation->speed = 3;
 		timer += dt;
+		//std::cout << timer;
 		if (timer >= powerUpTime)
 		{
 			Engin::Get()->Audio().StopMusic();
 			powerUp = !powerUp;
+			OnStateChanged.Invoke(powerUp);
 			timer = 0;
 		}
 	}
@@ -130,7 +136,6 @@ void PlayerController::Update(float dt)
 	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_S) && goDown == true) {
 		newMovementState = MovementState::MOVE_DOWN;
 	}
-
 
 	switch (currentMovementState) {
 	case MovementState::MOVE_RIGHT:
@@ -160,7 +165,7 @@ void PlayerController::Update(float dt)
 	default:
 		break;
 	}
-
+	
 	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
 	if (collisionDirection != EDirections::NONE) {
 		currentMovementState = MovementState::IDLE;

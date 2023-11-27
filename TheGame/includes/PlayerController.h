@@ -2,6 +2,7 @@
 #include "Animation.h"
 #include "engin.h"
 #include "TileMap.h"
+#include "Subject.h"
 class PlayerController : public Component , public IUpdatable{
 
 	enum class MovementState {
@@ -38,6 +39,8 @@ public:
 	 void CheckCollision();
 	 Entity* CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset);
 	 void CreateColliders();
+	 Subject<bool> OnStateChanged;
+	 Subject<int> OnEatDot;
 private:
 	bool powerUp;
 	float playerSpeed;

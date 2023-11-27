@@ -62,3 +62,40 @@ bool BoxCollider::CheckRectCircle(float rx, float ry, float rw, float rh, float 
 
     return CheckPointCircle(tx, ty, cx, cy, cr);
 }
+
+void BoxCollider::AddToLayer(const std::string& layerName, Entity* entity)
+{
+    if (m_Layers.count(layerName) == 0)
+    {
+        m_Layers.emplace(layerName, std::vector<Entity*>());
+    }
+
+    m_Layers[layerName].push_back(entity);
+}
+
+bool BoxCollider::CollideWithLayer(Entity* entity, const std::string& layerName, Entity** other)
+{
+    *other = nullptr;
+    if (m_Layers.count(layerName) > 0)
+    {
+        float r1x, r1y, r1w, r1h;
+        float r2x, r2y, r2w, r2h;
+
+        entity->GetPosition(&r1x, &r1y);
+        entity->GetSize(&r1w, &r1h);
+
+        for (Entity* e : m_Layers[layerName])
+        {
+            e->GetPosition(&r2x, &r2y);
+            e->GetSize(&r2w, &r2h);
+
+            if (CheckRects(r1x, r1y, r1w, r1h, r2x, r2y, r2w, r2h))
+            {
+                *other = e;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}

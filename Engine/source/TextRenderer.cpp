@@ -13,14 +13,14 @@ TextRenderer::TextRenderer(Entity* entity)
 TextRenderer::~TextRenderer()
 {
 }
-
 void TextRenderer::Draw()
 {
+	int yessir = 2;
 	square.x = m_Entity->GetX();
 	square.y = m_Entity->GetY();
 	square.h = h;
 	square.w = w;
-	Engin::Get()->Graphics().DrawString("Press   Enter   Button", id, 200, 200, Color::Blue);
+	Engin::Get()->Graphics().DrawString(std::to_string(yessir), id, 200, 200, Color::Blue);
 }
 
 void TextRenderer::Start()
@@ -30,8 +30,6 @@ void TextRenderer::Start()
 void TextRenderer::Destroy()
 {
 }
-
-
 
 void TextRenderer::InitText(const std::string& fontfilename, float fontSize)
 {
