@@ -24,7 +24,7 @@ void SpriteRenderer::Draw()
 	square.h = h;
 	square.w = w;
 	//Engin::Get()->Graphics().DrawTexture(id, square, Color::Red);
-	Engin::Get()->Graphics().DrawString("Press Enter Button", id, 200, 200, Color::Red);
+	//Engin::Get()->Graphics().DrawString("Press Enter Button", id, 200, 200, Color::Red);
 	//homer::Engin::Get()->Graphics().FillRect(100, 100, 10, 10, Color::Red);
 }
 
@@ -42,10 +42,4 @@ void SpriteRenderer::Init(const std::string& filename,float H , float W)
 	//id = Engin::Get()->Graphics().LoadTexture(filename);
 	w = W;
 	h = H;
-}
-
-void SpriteRenderer::InitText(const std::string& fontfilename,float fontSize)
-{
-	//id = Engin::Get()->Graphics().LoadFont(fontfilename,fontSize);
-	id = homer::Engin::Get()->Graphics().LoadFont(fontfilename, fontSize);
 }

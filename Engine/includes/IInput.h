@@ -27,6 +27,7 @@ namespace homer{
 		EKEY_LEFT = 80,
 		EKEY_DOWN = 81,
 		EKEY_UP = 82,
+		EKEY_KP_ENTER = 88,
 	};
 
 	class IInput

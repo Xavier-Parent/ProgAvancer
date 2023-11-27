@@ -4,8 +4,8 @@ using namespace homer;
 BoxCollider::BoxCollider(Entity* entity)
 	:Component(entity)
 {
-	height = 16;
-	width = 16;
+	height = 20;
+	width = 20;
 }
 
 BoxCollider::~BoxCollider()
@@ -22,8 +22,8 @@ void BoxCollider::Destroy()
 
 void BoxCollider::Draw()
 {
-    RectF frame = { m_Entity->GetX() + 8, m_Entity->GetY() + 8, width,height };
-    Engin::Get()->Graphics().DrawRect(frame, Color::Red);
+    RectF frame = { m_Entity->GetX() + 6, m_Entity->GetY() + 6, width,height };
+    Engin::Get()->Graphics().DrawRect(frame, Color::Green);
 }
 
 bool BoxCollider::CheckPointCircle(float px, float py, float cx, float cy, float cr)

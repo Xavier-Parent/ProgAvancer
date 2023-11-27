@@ -15,13 +15,13 @@ Tilemap::Tilemap(Entity* parent)
 
 void Tilemap::Draw()
 {
-	//std::cout << "Draw";
+
 	for (auto layer : m_Tilemap)
 	{
 		//std::cout << "layer Draw";
-		for (int y = 0; y < m_Height/m_TileHeight + 1; y++)
+		for (int y = 0; y < m_Height / m_TileHeight; y++)
 		{
-			for (int x = 0; x < m_Width/m_TileWidth; x++)
+			for (int x = 0; x < m_Width / m_TileWidth; x++)
 			{
 				int _idx = layer.second[y][x];
 
@@ -95,7 +95,7 @@ void Tilemap::AddLayerFromCSV(const std::string& layerName, const std::string& f
 	std::ifstream file(filename);
 	TLayer layerData;
 	std::string line;
-	int rowIndex = 0; 
+	int rowIndex = 0;
 	while (std::getline(file, line))
 	{
 		std::istringstream iss(line);
@@ -110,7 +110,7 @@ void Tilemap::AddLayerFromCSV(const std::string& layerName, const std::string& f
 				// Handle conversion errors
 				std::cerr << "Error converting string to integer: " << e.what() << std::endl;
 			}
-		}		
+		}
 		if (!row.empty()) {
 			layerData.push_back(row);
 		}
@@ -144,43 +144,73 @@ int Clamp(int value, const int min, const int max)
 	return value;
 }
 
-bool Tilemap::IsColliding(const std::string& layer, Entity* entity, int* tileIndex)
+EDirections Tilemap::IsColliding(const std::string& layer, Entity* entity, int* tileIndex, int* tileX, int* tileY)
 {
-	float x = entity->GetX() + 8;
-	float y = entity->GetY() + 8;
+	EDirections dir = NONE;
+	float x = entity->GetX() + 6;
+	float y = entity->GetY() + 6;
 
-	//prendre le w et h du joueur
 	float w = entity->GetComponent<BoxCollider>()->GetW();
 	float h = entity->GetComponent<BoxCollider>()->GetH();
 
-	const int tLeftTile = Clamp(static_cast<int>(x / (m_TileWidth * m_ScaleFactor)), 0, m_Width);
-	const int tRightTile = Clamp(static_cast<int>((x + w) /( m_TileWidth * m_ScaleFactor)), 0, m_Width);
-	const int tTopTile = Clamp(static_cast<int>(y /( m_TileHeight * m_ScaleFactor)), 0, m_Height);
-	const int tBottomTile = Clamp(static_cast<int>((y + h) /( m_TileHeight * m_ScaleFactor)), 0, m_Height);
+	const int tLeftTile = Clamp(static_cast<int>((x + 1) / (m_TileWidth * m_ScaleFactor)), 0, m_Width);
+	const int tRightTile = Clamp(static_cast<int>((x - 1 + w) / (m_TileWidth * m_ScaleFactor)), 0, m_Width);
+	const int tTopTile = Clamp(static_cast<int>((y + 1) / (m_TileHeight * m_ScaleFactor)), 0, m_Height);
+	const int tBottomTile = Clamp(static_cast<int>((y - 1 + h) / (m_TileHeight * m_ScaleFactor)), 0, m_Height);
 
 	for (int i = tLeftTile; i <= tRightTile; i++)
 	{
 		for (int j = tTopTile; j <= tBottomTile; j++)
 		{
-			if (i < m_Width / m_TileWidth && j < m_Height / m_TileHeight)
+			if (i < m_Width / m_TileWidth && j <= m_Height / m_TileHeight)
 			{
 				if (m_Tilemap[layer][j][i] != -1)
 				{
 					*tileIndex = m_Tilemap[layer][j][i];
+					*tileX = i * m_TileWidth * m_ScaleFactor;
+					*tileY = j * m_TileHeight * m_ScaleFactor;
+
 					if (m_Tilemap[layer] == (m_Tilemap["Collectable"]))
 					{
 						m_Tilemap[layer][j][i] = -1;
 					}
+					if (m_Tilemap[layer] == (m_Tilemap["PowerUp"]))
+					{
+						m_Tilemap[layer][j][i] = -1;
+					}
+
 					if (m_Tilemap[layer] == (m_Tilemap["Wall"]))
 					{
-						std::cout << "Allo";
 					}
-					return true;
+
+					if (abs(x - i * m_TileWidth * m_ScaleFactor) > abs(y - j * m_TileHeight * m_ScaleFactor))
+					{
+						if (x > i * m_TileWidth * m_ScaleFactor)
+						{
+							dir = RIGHT;
+						}
+						else {
+
+							dir = LEFT;
+						}
+					}
+					else
+					{
+						if (y > j * m_TileHeight * m_ScaleFactor)
+						{
+							dir = DOWN;
+						}
+						else {
+
+							dir = UP;
+						}
+					}
+					//std::cout << m_Tilemap[layer][j][i] << std::endl;
+
 				}
 			}
 		}
 	}
-
+	return dir;
 	//*tileIndex = -1;
-	return false;
 }

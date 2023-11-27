@@ -216,6 +216,7 @@ void SDLGraphics::DrawString(const std::string& text, size_t fontId, float x, fl
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
 		SDL_RenderCopy(m_Renderer, m_TextureBuffer, nullptr, _destination);
 		SDL_FreeSurface(_surface);
+		SDL_DestroyTexture(m_TextureBuffer);
 	}
 }
 

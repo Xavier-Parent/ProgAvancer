@@ -63,6 +63,7 @@ public:
 	/// <param name="loop">Boolean to loop the clip</param>
 	void Play(const std::string& name, bool loop);
 
+	float speed;
 private:
 	size_t id;
 	RectI frame;

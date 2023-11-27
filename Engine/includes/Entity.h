@@ -26,7 +26,7 @@ public:
 		T* cmp = new T(this);
 		const type_info* type = &typeid(*cmp);
 		m_Components[type] = cmp;
-
+		
 		IUpdatable* u_cmp = dynamic_cast<IUpdatable*>(cmp);
 		if (u_cmp != nullptr)
 		{
@@ -38,7 +38,9 @@ public:
 		{
 			m_Drawable.push_back(d_cmp);
 		}
+		m_Components[type]->Start();
 		return cmp;
+		
 	}
 	/// <summary>
 	/// Function to Fetch the component in an entity
@@ -70,6 +72,12 @@ public:
 	/// function draw fo the entity
 	/// </summary>
 	void Draw();
+	float GetW() { return m_Width; }
+	/// <summary>
+	/// Function to return the Vertical Position of the entity
+	/// </summary>
+	/// <returns>Return the Y value</returns>
+	float GetH() { return m_Height; }
 	/// <summary>
 	/// Function to return the position Horizontal of the Entity
 	/// </summary>

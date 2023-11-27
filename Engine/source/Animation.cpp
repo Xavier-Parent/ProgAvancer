@@ -11,6 +11,7 @@ Animation::Animation(Entity* entity) : SpriteRenderer(entity)
 	rows = 0;
 	loop = false;
 	timer = 0;
+	speed = 1;
 }
 
 Animation::~Animation()
@@ -34,7 +35,7 @@ void Animation::AddClip(const std::string& name, int start, int count, float del
 
 void Animation::Update(float dt)
 {
-	timer += dt;
+	timer += dt * speed;
 	if (timer > currentClip._delay)
 	{
 		timer = 0;
@@ -73,6 +74,7 @@ void Animation::Play(const std::string& name, bool loop)
 	{
 		return;
 	}
+
 	if (clipMap.count(name) > 0)
 	{
 		currentClip = clipMap[name];

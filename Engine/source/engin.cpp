@@ -59,7 +59,7 @@ void Engin::ProcessInput(void)
 {
 	m_Input->Update();
 #if _DEBUG
-	if (m_Input->IsKeyDown(EKey::EKEY_2))
+	if (m_Input->IsKeyDown(EKey::EKEY_KP_ENTER))
 	{
 		m_World->Load("Game Scene");
 	}

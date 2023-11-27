@@ -9,6 +9,16 @@ typedef std::vector<std::vector<int>> TLayer;
 typedef std::map<std::string, TLayer> TTilemap;
 typedef std::vector<RectI> TTileset;
 
+
+enum EDirections
+{
+    NONE,
+    RIGHT,
+    UP,
+    LEFT,
+    DOWN
+};
+
 class Tilemap : public Component, public IDrawable
 {
 public:
@@ -22,7 +32,7 @@ public:
     void Load(const std::string& filename, int mapW, int mapH, int tileW, int tileH);
     void AddLayer(const std::string& layer, TLayer tiles);
     TLayer GetLayer(const std::string& name);
-    bool IsColliding(const std::string& layer, Entity* entity, int* tileIndex);
+    EDirections IsColliding(const std::string& layer, Entity* entity, int* tileIndex, int* tileX, int* tileY);
 
 private:
     TTilemap m_Tilemap;
@@ -32,5 +42,5 @@ private:
     int m_TileWidth = 0;
     int m_TileHeight = 0;
     TTileset m_Tileset;
-    float m_ScaleFactor = 2.875f;
+    float m_ScaleFactor = 3;
 };
