@@ -41,8 +41,10 @@ bool SDLGraphics::Initialize(const std::string& title, int w, int h)
 
 void SDLGraphics::Shutdown()
 {
+	TTF_Quit();
+	SDL_DestroyRenderer(m_Renderer);
 	SDL_DestroyWindow(m_Window);
-    TTF_Quit();
+	SDL_Quit();
 }
 
 void SDLGraphics::SetColor(const Color& color)
@@ -52,6 +54,7 @@ void SDLGraphics::SetColor(const Color& color)
 
 void SDLGraphics::Clear()
 {
+	// verifier ici pour la couleur du background
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_Renderer);
 }
@@ -205,16 +208,16 @@ void SDLGraphics::DrawString(const std::string& text, size_t fontId, float x, fl
 {
 	if (m_FontMap.count(fontId) > 0)
 	{
-		SDL_Rect* _destination = new SDL_Rect();
-		_destination->x = static_cast<int>(x);
-		_destination->y = static_cast<int>(y);
-		GetTextSize(text,fontId,&_destination->w,&_destination->h);
-		SDL_Color* _color = new SDL_Color();
-		_color->r = color.red;
+		SDL_Rect _destination =  SDL_Rect();
+		_destination.x = static_cast<int>(x);
+		_destination.y = static_cast<int>(y);
+		GetTextSize(text,fontId,&_destination.w,&_destination.h);
+		SDL_Color _color = SDL_Color();
+		_color.r = color.red;
 		TTF_Font* _font = m_FontMap[fontId];
-		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), *_color);
+		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), _color);
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
-		SDL_RenderCopy(m_Renderer, m_TextureBuffer, nullptr, _destination);
+		SDL_RenderCopy(m_Renderer, m_TextureBuffer, nullptr, &_destination);
 		SDL_FreeSurface(_surface);
 		SDL_DestroyTexture(m_TextureBuffer);
 	}

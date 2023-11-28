@@ -28,3 +28,18 @@ void Entity::SetPosition(float x, float y)
 	X = x;
 	Y = y;
 }
+
+
+void Entity::Destroy()
+{
+	for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
+	{
+		it->second->Destroy();
+		delete it->second;
+	}
+
+	m_Components.clear();
+	m_Drawable.clear();
+	m_Updatable.clear();
+}
+

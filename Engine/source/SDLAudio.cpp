@@ -10,6 +10,7 @@ SDLAudio::SDLAudio()
 SDLAudio::~SDLAudio()
 {
 	Mix_CloseAudio();
+	Mix_Quit();
 }
 
 size_t SDLAudio::LoadMusic(const std::string& filename)
@@ -22,8 +23,7 @@ size_t SDLAudio::LoadMusic(const std::string& filename)
 
 	Mix_Music* _mus = Mix_LoadMUS(filename.c_str());
 	if (_mus)
-	{
-		
+	{		
 		m_MusicMap.emplace(_musId, _mus);
 		return _musId;
 	}
@@ -55,13 +55,6 @@ size_t SDLAudio::LoadSound(const std::string& filename)
 
 void SDLAudio::PlayMusic(size_t id)
 {
-	/*
-	if (m_MusicMap.count(id) > 0)
-	{
-		Mix_PlayMusic(m_MusicMap[id],0);
-		//Mix_HaltMusic();
-	}
-	*/
 	PlayMusic(id, -1);
 }
 

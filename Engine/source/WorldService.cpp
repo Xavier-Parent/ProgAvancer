@@ -15,6 +15,17 @@ void WorldService::Update(float dt)
 	}
 }
 
+void WorldService::Shutdown()
+{
+	Unload();
+
+	for (auto scene : m_Scenes)
+	{
+		delete scene.second;
+	}
+
+	m_Scenes.clear();
+}
 
 void WorldService::Load(const std::string& scene)
 {
@@ -74,5 +85,86 @@ void WorldService::Remove(Entity* entity)
 			m_EntityMap.erase(entity->GetName());
 			break;
 		}
+	}
+}
+
+// test de fonction a partir de ici
+void WorldService::Unload()
+{
+	for (auto entity : m_EntityInWorld)
+	{
+		entity->Destroy();
+		delete entity;
+	}
+
+	for (auto entity : m_EntityToStart)
+	{
+		delete entity;
+	}
+
+	for (auto entity : m_EntityToRemove)
+	{
+		entity->Destroy();
+		delete entity;
+	}
+
+	m_EntityInWorld.clear();
+	m_EntityMap.clear();
+	m_EntityToStart.clear();
+	m_EntityToRemove.clear();
+}
+
+void WorldService::CleanEntities()
+{
+	if (m_EntityToRemove.size() > 0)
+	{
+		std::vector<Entity*> _trash = m_EntityToRemove;
+		m_EntityToRemove.clear();
+
+		for (auto entity : _trash)
+		{
+			m_EntityMap.erase(entity->GetName());
+			entity->Destroy();
+
+			for (auto it = m_EntityInWorld.begin(); it != m_EntityInWorld.end(); ++it)
+			{
+				if (entity == *it)
+				{
+					m_EntityInWorld.erase(it);
+					delete entity;
+					break;
+				}
+			}
+		}
+
+		_trash.clear();
+	}
+}
+
+void WorldService::StartEntities()
+{
+	if (m_EntityToStart.size() > 0)
+	{
+		std::vector<Entity*> _starting = m_EntityToStart;
+		m_EntityToStart.clear();
+
+		for (auto entity : _starting)
+		{
+			if (m_EntityMap.count(entity->GetName()) > 0)
+			{
+				//Engine::Get().Logger().LogWarning("Not adding entity with same name");
+				continue;
+			}
+
+			m_EntityInWorld.emplace_back(entity);
+			m_EntityMap.emplace(entity->GetName(), entity);
+		}
+
+		for (auto entity : _starting)
+		{
+			entity->Start();
+		}
+
+		_starting.clear();
 	}
 }

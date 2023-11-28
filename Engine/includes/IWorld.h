@@ -41,5 +41,13 @@ public:
 	/// <param name="name"></param>
 	/// <returns></returns>
 	virtual Entity* Create(const std::string& name) = 0;
+
+	virtual void Unload() = 0;
+
+	virtual void CleanEntities() = 0;
+
+	virtual void StartEntities() = 0;
+
+	virtual void Shutdown() = 0;
 };
 

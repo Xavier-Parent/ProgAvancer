@@ -4,8 +4,8 @@ using namespace homer;
 Enemy::Enemy(Entity* entity)
 	:Component(entity)
 {
-	x = 44;
-	y = 40;
+	x= 0;
+	y = 0;
 	animation = m_Entity->GetComponent<Animation>();
 	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
 	goUp = false;
@@ -16,6 +16,11 @@ Enemy::Enemy(Entity* entity)
 	normalSpeed = 125;
 	weakenSpeed = 50;
 	enemySpeed = 125;
+
+	animation->AddClip("ghostRight", 0, 2, 0.1f);
+	animation->AddClip("ghostLeft", 2, 2, 0.1f);
+	animation->AddClip("ghostUp", 4, 2, 0.1f);
+	animation->AddClip("ghostDown", 6, 2, 0.1f);
 }
 
 Enemy::~Enemy()
@@ -30,7 +35,7 @@ void Enemy::OnNotify(const bool& value)
 
 void Enemy::Start()
 {
-	m_Entity->SetPosition(x, y);
+	//m_Entity->SetPosition(x, y);
 	currentMovementState = MovementState::MOVE_DOWN;
 	CreateColliders();
 }

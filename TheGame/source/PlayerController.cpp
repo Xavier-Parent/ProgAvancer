@@ -9,6 +9,11 @@ PlayerController::PlayerController(Entity* entity)
 	y = 529;
 	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
 	animation = m_Entity->GetComponent<Animation>();
+	animation->AddClip("Right", 0, 4, 0.1f);
+	animation->AddClip("Left", 14, 4, 0.1f);
+	animation->AddClip("Up", 28, 4, 0.1f);
+	animation->AddClip("Down", 42, 4, 0.1f);
+	animation->AddClip("Dead", 4, 10, 0.2f);
 	playerSpeed = 150;
 	currentSoundIndex = 0;
 	powerUp = false;

@@ -8,7 +8,7 @@ class SDLAudio : public IAudio
 {
 public:
 	SDLAudio();
-	~SDLAudio();
+	virtual ~SDLAudio();
 	virtual size_t LoadMusic(const std::string& filename) override;
 	virtual size_t LoadSound(const std::string& filename) override;
 	virtual void PlayMusic(size_t id) override;

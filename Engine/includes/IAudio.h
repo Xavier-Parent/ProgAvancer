@@ -5,6 +5,7 @@ class IAudio
 {
 
 public:
+	virtual ~IAudio() = default;
 	/// <summary>
 	/// Function to Load a music
 	/// </summary>

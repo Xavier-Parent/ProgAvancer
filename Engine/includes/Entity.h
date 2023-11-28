@@ -108,7 +108,7 @@ public:
 	/// Destroy the Entity
 	/// </summary>
 	/// 
-	void Destroy() {}
+	void Destroy();
 	/// <summary>
 	/// Function to get the name of the Entity
 	/// </summary>

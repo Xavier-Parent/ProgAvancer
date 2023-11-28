@@ -32,6 +32,7 @@ struct Flip
 class IGraphics
 {
 public:
+	virtual ~IGraphics() = default;
 	/// <summary>
 	/// Function to Draw a line
 	/// </summary>

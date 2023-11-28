@@ -8,6 +8,7 @@ class SDLGraphics : public IGraphics
 public:
 
 	SDLGraphics();
+	virtual ~SDLGraphics() = default; 
 	virtual void DrawLine(int x0, int y0, int x1, int y1) override;
 
 	virtual bool Initialize(const std::string& title, int w, int h) override;

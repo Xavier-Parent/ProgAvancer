@@ -63,14 +63,6 @@ void Engin::ProcessInput(void)
 	{
 		m_World->Load("Game Scene");
 	}
-	if (m_Input->IsKeyDown(EKey::EKEY_1))
-	{
-		//m_Graphics->FillRect(100, 100, 10, 10, Color::Red);
-
-		Entity* pacMan = m_World->Create("pacMan");
-		pacMan->AddComponent<SpriteRenderer>()->Init("assets/sprite/pacman1.png", 500, 500);
-	}
-
 	if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
 	{
 		Quit();
@@ -84,13 +76,6 @@ static float speed = 100;
 void Engin::Update(float dt)
 {
 	m_World->Update(dt);
-
-#ifdef _DEBUG
-	if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
-	{
-		ShutDown();
-	}
-#endif	
 }
 
 void Engin::Render(void)
@@ -107,6 +92,12 @@ void Engin::Quit()
 
 void Engin::ShutDown(void)
 {
+	if (m_World != nullptr)
+	{
+		m_World->Shutdown();
+		delete m_World;
+	}
+
 	if (m_Input != nullptr)
 	{
 		delete m_Input;
@@ -127,5 +118,5 @@ void Engin::ShutDown(void)
 	{
 		delete m_Logger;
 	}
-	SDL_Quit();
+	//SDL_Quit();
 }

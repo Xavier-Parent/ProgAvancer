@@ -51,9 +51,20 @@ public:
 	/// <returns></returns>
 	virtual Entity* Create(const std::string& name) override;
 
+	void Unload();
+	
+	virtual void CleanEntities();
+
+	virtual void StartEntities();
+
+	virtual void Shutdown();
+
 private:
 	std::map<std::string, IScene*> m_Scenes;
 	std::vector<Entity*> m_EntityInWorld;
+	//std::vector<Entity*> m_EntityInWorld;
+	std::vector<Entity*> m_EntityToRemove;
+	std::vector<Entity*> m_EntityToStart;
 	std::map<std::string, Entity*> m_EntityMap;
 	IScene* m_CurrentScene = nullptr;
 };
