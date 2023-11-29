@@ -26,56 +26,37 @@ void GameScene::Load()
 	pacMan->AddComponent<BoxCollider>()->AddToLayer("EnemyLayer", pacMan);
 	animation->InitAnimation("assets/sprite/pacManClean.png", 14, 4, 16, 16);
 
-
 	Entity* Blinky = Engin::Get()->World().Create("ghost");
 	Blinky->SetPosition(40, 44);
 	Animation* animationBlinky = Blinky->AddComponent<Animation>();
 	Enemy* E = Blinky->AddComponent<Enemy>();
 	Blinky->AddComponent<BoxCollider>();
-	animationBlinky->InitAnimation("assets/sprite/blinky.png", 8, 1, 16,16);
+	animationBlinky->InitAnimation("assets/sprite/blinky.png", 16, 1, 16,16);
+	
+
 
 	Entity* inky = Engin::Get()->World().Create("inky");
 	inky->SetPosition(40, 500);
 	Animation* animationInky = inky->AddComponent<Animation>();
 	Enemy* E2 = inky->AddComponent<Enemy>();
 	inky->AddComponent<BoxCollider>();
-	animationInky->InitAnimation("assets/sprite/inky.png", 8, 1, 16,16);
+	animationInky->InitAnimation("assets/sprite/inky.png", 16, 1, 16,16);
 
 	Entity* pinky = Engin::Get()->World().Create("pinky");
 	pinky->SetPosition(500, 44);
 	Animation* animationPinky = pinky->AddComponent<Animation>();
 	Enemy* E3 = pinky->AddComponent<Enemy>();
 	pinky->AddComponent<BoxCollider>();
-	animationPinky->InitAnimation("assets/sprite/pinky.png", 8, 1, 16, 16);
+	animationPinky->InitAnimation("assets/sprite/pinky.png", 16, 1, 16, 16);
+
 
 	Entity* clyde = Engin::Get()->World().Create("clyde");
 	clyde->SetPosition(500, 500);
 	Animation* animationClyde = clyde->AddComponent<Animation>();
 	Enemy* E4 = clyde->AddComponent<Enemy>();
 	clyde->AddComponent<BoxCollider>();
-	animationClyde->InitAnimation("assets/sprite/clyde.png", 8, 1, 16, 16);
-	/*
-	Entity* ghost3 = Engin::Get()->World().Create("ghost3");
-	ghost2->SetPosition(400, 430);
-	Animation* animationGhost2 = ghost2->AddComponent<Animation>();
-	Enemy* E2 = ghost2->AddComponent<Enemy>();
-	ghost2->AddComponent<BoxCollider>();
-	animationGhost2->InitAnimation("assets/sprite/pacman2.png", 8, 1, 16, 16);
+	animationClyde->InitAnimation("assets/sprite/clyde.png", 16, 1, 16, 16);
 
-	Entity* ghost4 = Engin::Get()->World().Create("ghost4");
-	ghost2->SetPosition(400, 430);
-	Animation* animationGhost2 = ghost2->AddComponent<Animation>();
-	Enemy* E2 = ghost2->AddComponent<Enemy>();
-	ghost2->AddComponent<BoxCollider>();
-	animationGhost2->InitAnimation("assets/sprite/pacman2.png", 8, 1, 16, 16);
-	*/
-
-
-	//vais devoir faire une sprite sheet pour le ghost mort
-	//animationGhost->InitAnimation("assets/sprite/ghostdead.png", 4, 1, 16, 16);
-	// 
-	//animationGhost->AddClip("ghostdead", 0, 2, 0.1f);
-	//animationGhost->AddClip("allin", 0, 6, 0.2f);
 	P->OnStateChanged.AddListener(E);
 	P->OnStateChanged.AddListener(E2);
 	P->OnStateChanged.AddListener(E3);

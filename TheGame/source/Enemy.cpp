@@ -21,6 +21,10 @@ Enemy::Enemy(Entity* entity)
 	animation->AddClip("ghostLeft", 2, 2, 0.1f);
 	animation->AddClip("ghostUp", 4, 2, 0.1f);
 	animation->AddClip("ghostDown", 6, 2, 0.1f);
+
+
+	animation->AddClip("ghostDead", 10, 2, 0.1f);
+
 }
 
 Enemy::~Enemy()
@@ -31,6 +35,17 @@ void Enemy::OnNotify(const bool& value)
 {
 	std::cout << "Health : " << value << std::endl;
 	powerUp = !powerUp;
+	if (powerUp == true)
+	{
+		animation->Stop();
+		enemySpeed = weakenSpeed;
+		animation->Play("ghostDead", true);
+	}
+	else
+	{
+		animation->Stop();
+		enemySpeed = normalSpeed;
+	}
 }
 
 void Enemy::Start()
@@ -42,6 +57,7 @@ void Enemy::Start()
 
 void Enemy::Update(float dt)
 {
+	std::cout << powerUp;
 	x = m_Entity->GetX();
 	y = m_Entity->GetY();
 	int colIndex;
@@ -52,14 +68,7 @@ void Enemy::Update(float dt)
 	MovementState newMovementState = currentMovementState;
 	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
 
-	if (powerUp == true)
-	{
-		enemySpeed = weakenSpeed;
-	}
-	else
-	{
-		enemySpeed = normalSpeed;
-	}
+
 
 	if (collisionDirection != EDirections::NONE) {
 		ChooseRandomDirection();
@@ -76,13 +85,17 @@ void Enemy::Update(float dt)
 	switch (currentMovementState) {
 	case MovementState::MOVE_RIGHT:
 		x += enemySpeed * dt;
-		animation->Play("ghostRight", true);
+		if (powerUp == false)
+		{
+			animation->Play("ghostRight", true);
+		}
 		if (x > 712) {
 			x = -36;
 		}
 		break;
 	case MovementState::MOVE_LEFT:
 		x -= enemySpeed * dt;
+		if (powerUp == false)
 		animation->Play("ghostLeft", true);
 		if (x < -36) {
 			x = 712;
@@ -90,11 +103,12 @@ void Enemy::Update(float dt)
 		break;
 	case MovementState::MOVE_UP:
 		y -= enemySpeed * dt;
-
+		if (powerUp == false)
 		animation->Play("ghostUp", true);
 		break;
 	case MovementState::MOVE_DOWN:
 		y += enemySpeed * dt;
+		if (powerUp == false)
 		animation->Play("ghostDown", true);
 		break;
 	case MovementState::IDLE:

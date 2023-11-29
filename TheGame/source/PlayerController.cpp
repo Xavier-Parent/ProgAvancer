@@ -103,7 +103,7 @@ PlayerController::~PlayerController()
 float powerUpTime = 6;
 float timer = 0;
 bool testBool;
-
+bool beenCall;
 void PlayerController::Update(float dt)
 {
 
@@ -111,7 +111,11 @@ void PlayerController::Update(float dt)
 	y = m_Entity->GetY();
 	if (powerUp == true)
 	{
-		OnStateChanged.Invoke(powerUp);
+		if (beenCall == false)
+		{
+			OnStateChanged.Invoke(powerUp);
+			beenCall = true;
+		}
 		animation->speed = 3;
 		timer += dt;
 		//std::cout << timer;
@@ -120,6 +124,7 @@ void PlayerController::Update(float dt)
 			Engin::Get()->Audio().StopMusic();
 			powerUp = !powerUp;
 			OnStateChanged.Invoke(powerUp);
+			beenCall = false;
 			timer = 0;
 		}
 	}
