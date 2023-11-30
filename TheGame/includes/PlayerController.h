@@ -36,9 +36,12 @@ public:
 	 /// Function to Destroy
 	 /// </summary>
 	 virtual void Destroy() override;
+
 	 void CheckCollision();
+	 void CheckEnemyCollisions();
 	 Entity* CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset);
 	 void CreateColliders();
+	 void PlayerDead();
 	 Subject<bool> OnStateChanged;
 	 Subject<int> OnEatDot;
 private:

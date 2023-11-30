@@ -9,7 +9,7 @@ void TitleScene::Load()
 {
 	
 	Entity* Text = Engin::Get()->World().Create("text");
-	Text->AddComponent<TextRenderer>()->InitText("assets/arcade.ttf", 50);
+	Text->AddComponent<TextRenderer>()->InitText("assets/arcade.ttf", "J'aime les fruits", 50, 600,50);
 	
 	RectF square = RectF();
 	square.x = 100;

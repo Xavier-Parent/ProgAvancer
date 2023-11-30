@@ -1,6 +1,7 @@
+#pragma once
 #include "Component.h"
+#include <iostream>
 #include "engin.h"
-
 class TextRenderer : public Component, public IDrawable
 {
 public:
@@ -36,9 +37,10 @@ public:
 	/// <param name="w">The width of the sprite</param>
 	/// <param name="h">Height of the sprite</param>
 
-	void InitText(const std::string& fontfilename, float fontSize);
+	void InitText(const std::string& fontfilename,const std::string& text, float fontSize, float x , float y);
 private:
 	std::string file;
+	std::string currentText;
 	size_t id;
 	RectF square;
 	float h;

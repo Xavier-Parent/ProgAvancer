@@ -117,8 +117,8 @@ public:
 protected:
 	float X;
 	float Y;
-	float m_Width = 1.0f;
-	float m_Height = 1.0f;
+	float m_Width = 32.0f;
+	float m_Height = 32.0f;
 	std::map<const type_info*, Component*> m_Components;
 	std::vector<IDrawable*> m_Drawable;
 	std::vector<IUpdatable*> m_Updatable;

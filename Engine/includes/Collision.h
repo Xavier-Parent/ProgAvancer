@@ -1,10 +1,13 @@
+#pragma once
 #include <ICollider.h>
 #include <map>
 #include <vector>
 
-class Collider : public ICollider
+class Collision : public ICollider
 {
 public:
+    Collision();
+    virtual ~Collision() = default;
     virtual bool CheckPointCircle(float px, float py, float cx, float cy, float cr) override;
     virtual bool CheckCircles(float c1x, float c1y, float c1r, float c2x, float c2y, float c2r) override;
     virtual bool CheckPointRect(float px, float py, float rx, float ry, float rw, float rh) override;

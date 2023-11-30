@@ -40,6 +40,7 @@ public:
 	Entity* CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset);
 	void CreateColliders();
 	void ChooseRandomDirection();
+	void CheckPlayerCollisions();
 private:
 	bool powerUp;
 	float enemySpeed;

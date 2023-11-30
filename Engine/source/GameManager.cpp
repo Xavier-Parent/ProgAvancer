@@ -3,20 +3,18 @@
 #include "engin.h"
 
 using namespace homer;
-
-GameManager::GameManager()
+GameManager::GameManager(Entity* parent)
+	:Component(parent)
 {
 	score = 0;
 	currentIndex = 0;
-}
-
-GameManager::GameManager(Entity* parent)
-{
+	//Text->AddComponent<TextRenderer>()->InitText("assets/arcade.ttf", "J'aime les fruits", 50);
 }
 
 void GameManager::OnNotify(const int& value)
 {
 	score = value;
+	textRenderer->InitText("assets/arcade.ttf", std::to_string(score), 50, 360, 768);
 }
 size_t id;
 void GameManager::Draw()
@@ -32,7 +30,7 @@ float timere = 0;
 void GameManager::Update(float dt)
 {
 	timere += dt;
-	std::cout << timere << std::endl;
+	//std::cout << timere << std::endl;
 	if (timere >= 3 && first == false)
 	{
 		Engin::Get()->Audio().StopMusic();
@@ -59,19 +57,24 @@ void GameManager::Update(float dt)
 		Engin::Get()->Audio().StopMusic();
 		currentIndex = 4;
 		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		third = true;
+		fourth = true;
 	}
 	if (timere >= 48 && five == false)
 	{
 		Engin::Get()->Audio().StopMusic();
 		currentIndex = 5;
 		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		third = true;
+		five = true;
 	}
 }
 
 void GameManager::Start()
 {
+	
+	textRenderer = m_Entity->AddComponent<TextRenderer>();
+	textRenderer->InitText("assets/arcade.ttf",std::to_string(score), 50, 360,768);
+	textRenderer2 = m_Entity->AddComponent<TextRenderer>();
+	textRenderer2->InitText("assets/arcade.ttf", "score ", 50, 150, 768);
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/game_start.wav"));
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/siren_1.wav"));
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/siren_2.wav"));
@@ -81,6 +84,8 @@ void GameManager::Start()
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/retreating.wav"));
 	currentIndex = 0;
 	Engin::Get()->Audio().PlayMusic(musicIds[currentIndex],0);
+
+
 }
 
 void GameManager::Destroy()

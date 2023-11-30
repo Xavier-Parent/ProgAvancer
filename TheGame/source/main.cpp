@@ -5,7 +5,7 @@
 #include "engin.h"
 #include "TitleScene.h"
 #include "GameScene.h"
-#include <vld.h>
+//#include <vld.h>
 using namespace homer;
 void InitGameplay(void) {
 	Engin::Get()->World().Register("Title Scene",new TitleScene);
@@ -14,7 +14,7 @@ void InitGameplay(void) {
 }
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
 	Engin* theEngine = Engin::Get();
-	if (theEngine->Init("TestGame", 800, 800)) {
+	if (theEngine->Init("TestGame", 720, 840)) {
 		InitGameplay();
 		theEngine->Start();
 	}

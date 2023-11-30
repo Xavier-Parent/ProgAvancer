@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "BoxCollider.h"
+#include "PlayerController.h"
 using namespace homer;
 Enemy::Enemy(Entity* entity)
 	:Component(entity)
@@ -23,7 +24,7 @@ Enemy::Enemy(Entity* entity)
 	animation->AddClip("ghostDown", 6, 2, 0.1f);
 
 
-	animation->AddClip("ghostDead", 10, 2, 0.1f);
+	animation->AddClip("ghostDead", 8, 2, 0.1f);
 
 }
 
@@ -31,9 +32,28 @@ Enemy::~Enemy()
 {
 }
 
+void Enemy::CheckPlayerCollisions()
+{
+	Entity* Player;
+
+	if (Engin::Get()->Collider().CollideWithLayer(m_Entity, "PlayerLayer", &Player))
+	{
+		if (powerUp == true)
+		{
+			m_Entity->SetPosition(310, 310);
+			Player->GetComponent<PlayerController>()->CheckEnemyCollisions();
+		}
+		else
+		{
+			Player->GetComponent<PlayerController>()->PlayerDead();
+			enemySpeed = 0;
+		}
+	}
+}
+
+
 void Enemy::OnNotify(const bool& value)
 {
-	std::cout << "Health : " << value << std::endl;
 	powerUp = !powerUp;
 	if (powerUp == true)
 	{
@@ -57,7 +77,8 @@ void Enemy::Start()
 
 void Enemy::Update(float dt)
 {
-	std::cout << powerUp;
+	CheckPlayerCollisions();
+	//std::cout << powerUp;
 	x = m_Entity->GetX();
 	y = m_Entity->GetY();
 	int colIndex;
@@ -157,7 +178,7 @@ void Enemy::CheckCollision()
 	{
 		goUp = true;
 	}
-	if (tileMap->IsColliding("Wall", downCollider, &colIndex, &colX, &colY))
+	if (tileMap->IsColliding("Wall", downCollider, &colIndex, &colX, &colY) || tileMap->IsColliding("Door", downCollider, &colIndex, &colX, &colY))
 	{
 		goDown = false;
 	}
@@ -187,22 +208,18 @@ void Enemy::CheckCollision()
 	if (dir == RIGHT)
 	{
 		x = colX + 18;
-		//ChooseRandomDirection();
 	}
 	if (dir == LEFT)
 	{
 		x = colX - 26;
-		//ChooseRandomDirection();
 	}
 	if (dir == DOWN)
 	{
 		y = colY + 18;
-		//ChooseRandomDirection();
 	}
 	if (dir == UP)
 	{
 		y = colY - 26;
-		//ChooseRandomDirection();
 	}
 
 }
@@ -210,7 +227,6 @@ void Enemy::CheckCollision()
 Entity* Enemy::CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset)
 {
 	Entity* collider = Engin::Get()->World().Create(name);
-	collider->AddComponent<BoxCollider>();
 	collider->SetPosition(m_Entity->GetX() + xOffset, m_Entity->GetY() + yOffset);
 	return collider;
 }

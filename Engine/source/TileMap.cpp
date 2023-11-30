@@ -150,9 +150,11 @@ EDirections Tilemap::IsColliding(const std::string& layer, Entity* entity, int* 
 	float x = entity->GetX() + 6;
 	float y = entity->GetY() + 6;
 
-	float w = entity->GetComponent<BoxCollider>()->GetW();
-	float h = entity->GetComponent<BoxCollider>()->GetH();
-
+	float w = 0;
+	float h = 0;
+	entity->GetSize(&w, &h);
+	w -= 12;
+	h -= 12;
 	const int tLeftTile = Clamp(static_cast<int>((x + 1) / (m_TileWidth * m_ScaleFactor)), 0, m_Width);
 	const int tRightTile = Clamp(static_cast<int>((x - 1 + w) / (m_TileWidth * m_ScaleFactor)), 0, m_Width);
 	const int tTopTile = Clamp(static_cast<int>((y + 1) / (m_TileHeight * m_ScaleFactor)), 0, m_Height);
@@ -205,7 +207,6 @@ EDirections Tilemap::IsColliding(const std::string& layer, Entity* entity, int* 
 							dir = UP;
 						}
 					}
-					//std::cout << m_Tilemap[layer][j][i] << std::endl;
 
 				}
 			}

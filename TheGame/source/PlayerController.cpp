@@ -8,6 +8,7 @@ PlayerController::PlayerController(Entity* entity)
 	x = 348;
 	y = 529;
 	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
+
 	animation = m_Entity->GetComponent<Animation>();
 	animation->AddClip("Right", 0, 4, 0.1f);
 	animation->AddClip("Left", 14, 4, 0.1f);
@@ -29,6 +30,14 @@ PlayerController::PlayerController(Entity* entity)
 }
 
 int collectable;
+void PlayerController::CheckEnemyCollisions()
+{
+	collectable += 20;
+	OnEatDot.Invoke(collectable);
+}
+
+
+
 void PlayerController::CheckCollision()
 {
 	if (tileMap->IsColliding("Wall", upCollider, &colIndex, &colX, &colY))
@@ -39,7 +48,7 @@ void PlayerController::CheckCollision()
 	{
 		goUp = true;
 	}
-	if (tileMap->IsColliding("Wall", downCollider, &colIndex, &colX, &colY))
+	if (tileMap->IsColliding("Wall", downCollider, &colIndex, &colX, &colY) || tileMap->IsColliding("Door", downCollider, &colIndex, &colX, &colY))
 	{
 		goDown = false;
 	}
@@ -96,6 +105,11 @@ void PlayerController::CheckCollision()
 		y = colY - 26;
 	}
 }
+void PlayerController::PlayerDead()
+{
+	playerSpeed = 0;
+	animation->Play("Dead",false);
+}
 PlayerController::~PlayerController()
 {
 }
@@ -106,7 +120,6 @@ bool testBool;
 bool beenCall;
 void PlayerController::Update(float dt)
 {
-
 	x = m_Entity->GetX();
 	y = m_Entity->GetY();
 	if (powerUp == true)
@@ -194,7 +207,7 @@ void PlayerController::Update(float dt)
 
 Entity* PlayerController::CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset) {
 	Entity* collider = Engin::Get()->World().Create(name);
-	collider->AddComponent<BoxCollider>();
+	//collider->AddComponent<BoxCollider>();
 	collider->SetPosition(m_Entity->GetX() + xOffset, m_Entity->GetY() + yOffset);
 	return collider;
 }

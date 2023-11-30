@@ -6,7 +6,9 @@
 #include "Animation.h"
 #include "TileMap.h"
 #include "BoxCollider.h"
+#include "TextRenderer.h"
 #include "GameManager.h"
+
 using namespace homer;
 void GameScene::Load()
 {
@@ -14,47 +16,47 @@ void GameScene::Load()
 	Tilemap* map;	
 	map = background->AddComponent<Tilemap>();
 	map->Load("assets/sprite/pacman9.png",240 , 248, 8, 8);
-	map->AddLayerFromCSV("Background", "assets/sprite/new_Background.csv");
-	map->AddLayerFromCSV("Collectable", "assets/sprite/new_Collectable.csv");
-	map->AddLayerFromCSV("PowerUp", "assets/sprite/new_PowerUp.csv");
-	map->AddLayerFromCSV("Wall","assets/sprite/new_Wall.csv");
+	map->AddLayerFromCSV("Background", "assets/sprite/final_Background.csv");
+	map->AddLayerFromCSV("Collectable", "assets/sprite/final_Collectable.csv");
+	map->AddLayerFromCSV("PowerUp", "assets/sprite/final_PowerUp.csv");
+	map->AddLayerFromCSV("Wall","assets/sprite/final_Wall.csv");
+	map->AddLayerFromCSV("Door", "assets/sprite/final_Door.csv");
 
 	Entity* pacMan = Engin::Get()->World().Create("pacMan");
 	Animation* animation;
 	animation = pacMan->AddComponent<Animation>();
+	Engin::Get()->Collider().AddToLayer("PlayerLayer", pacMan);
 	PlayerController* P =  pacMan->AddComponent<PlayerController>();
-	pacMan->AddComponent<BoxCollider>()->AddToLayer("EnemyLayer", pacMan);
+	
 	animation->InitAnimation("assets/sprite/pacManClean.png", 14, 4, 16, 16);
 
-	Entity* Blinky = Engin::Get()->World().Create("ghost");
-	Blinky->SetPosition(40, 44);
+	Entity* Blinky = Engin::Get()->World().Create("Blinky");
+	Blinky->SetPosition(310, 280);
 	Animation* animationBlinky = Blinky->AddComponent<Animation>();
 	Enemy* E = Blinky->AddComponent<Enemy>();
-	Blinky->AddComponent<BoxCollider>();
+	Engin::Get()->Collider().AddToLayer("EnemyLayer", Blinky);
 	animationBlinky->InitAnimation("assets/sprite/blinky.png", 16, 1, 16,16);
-	
-
 
 	Entity* inky = Engin::Get()->World().Create("inky");
-	inky->SetPosition(40, 500);
+	inky->SetPosition(310, 310);
 	Animation* animationInky = inky->AddComponent<Animation>();
 	Enemy* E2 = inky->AddComponent<Enemy>();
-	inky->AddComponent<BoxCollider>();
+	Engin::Get()->Collider().AddToLayer("EnemyLayer", inky);
 	animationInky->InitAnimation("assets/sprite/inky.png", 16, 1, 16,16);
 
 	Entity* pinky = Engin::Get()->World().Create("pinky");
-	pinky->SetPosition(500, 44);
+	pinky->SetPosition(310, 310);
 	Animation* animationPinky = pinky->AddComponent<Animation>();
 	Enemy* E3 = pinky->AddComponent<Enemy>();
-	pinky->AddComponent<BoxCollider>();
+	Engin::Get()->Collider().AddToLayer("EnemyLayer", pinky);
 	animationPinky->InitAnimation("assets/sprite/pinky.png", 16, 1, 16, 16);
 
 
 	Entity* clyde = Engin::Get()->World().Create("clyde");
-	clyde->SetPosition(500, 500);
+	clyde->SetPosition(310, 310);
 	Animation* animationClyde = clyde->AddComponent<Animation>();
 	Enemy* E4 = clyde->AddComponent<Enemy>();
-	clyde->AddComponent<BoxCollider>();
+	Engin::Get()->Collider().AddToLayer("EnemyLayer", clyde);
 	animationClyde->InitAnimation("assets/sprite/clyde.png", 16, 1, 16, 16);
 
 	P->OnStateChanged.AddListener(E);
@@ -63,6 +65,10 @@ void GameScene::Load()
 	P->OnStateChanged.AddListener(E4);
 
 	Entity* gameManager = Engin::Get()->World().Create("gameManager");
+	
 	GameManager* M = gameManager->AddComponent<GameManager>();
 	P->OnEatDot.AddListener(M);
+
+
+
 }

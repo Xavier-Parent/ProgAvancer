@@ -10,6 +10,8 @@
 #include "SDLAudio.h"
 #include "WorldService.h"
 #include "SpriteRenderer.h"
+#include "Collision.h"
+
 using namespace homer;
 bool Engin::Init(const char* name, int w, int h) {
 	
@@ -17,8 +19,10 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_IsInit = true;
 	m_Graphics = new SDLGraphics();
 	m_Audio = new SDLAudio();
+	//m_Collider = new Collider();
 	m_Graphics->Initialize(name, w, h);
 	m_World = new WorldService();
+	m_Collider = new Collision();
 #ifdef _DEBUG
 	m_Logger = new ConsoleLogger();
 #endif

@@ -29,20 +29,24 @@ void WorldService::Shutdown()
 
 void WorldService::Load(const std::string& scene)
 {
-	//Unload();
-	if (m_CurrentScene != nullptr) {
-		for (auto entity : m_EntityInWorld) {
-			entity->Destroy();
-			delete entity;
+	if(m_Scenes[scene] != m_CurrentScene)
+	{
+		//Unload();
+		if (m_CurrentScene != nullptr) {
+			for (auto entity : m_EntityInWorld) {
+				entity->Destroy();
+				delete entity;
+			}
+			m_EntityInWorld.clear();
+			m_EntityMap.clear();
 		}
-		m_EntityInWorld.clear();
-		m_EntityMap.clear();
+
+		if (m_Scenes.count(scene) > 0) {
+			m_CurrentScene = m_Scenes[scene];
+			m_CurrentScene->Load();
+		}
 	}
 
-	if (m_Scenes.count(scene) > 0) {
-		m_CurrentScene = m_Scenes[scene];
-		m_CurrentScene->Load();
-	}
 }
 
 void WorldService::Register(const std::string& name, IScene* scene)

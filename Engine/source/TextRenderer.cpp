@@ -15,12 +15,11 @@ TextRenderer::~TextRenderer()
 }
 void TextRenderer::Draw()
 {
-	int yessir = 2;
 	square.x = m_Entity->GetX();
 	square.y = m_Entity->GetY();
 	square.h = h;
 	square.w = w;
-	Engin::Get()->Graphics().DrawString(std::to_string(yessir), id, 200, 200, Color::Blue);
+	Engin::Get()->Graphics().DrawString(currentText, id, X, Y, Color::Blue);
 }
 
 void TextRenderer::Start()
@@ -31,7 +30,10 @@ void TextRenderer::Destroy()
 {
 }
 
-void TextRenderer::InitText(const std::string& fontfilename, float fontSize)
+void TextRenderer::InitText(const std::string& fontfilename,const std::string& text, float fontSize, float x,float y)
 {
+	X = x;
+	Y = y;
+	currentText = text;
 	id = homer::Engin::Get()->Graphics().LoadFont(fontfilename, fontSize);
 }
