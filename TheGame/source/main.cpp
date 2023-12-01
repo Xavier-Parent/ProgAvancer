@@ -5,7 +5,7 @@
 #include "engin.h"
 #include "TitleScene.h"
 #include "GameScene.h"
-//#include <vld.h>
+#include <vld.h>
 using namespace homer;
 void InitGameplay(void) {
 	Engin::Get()->World().Register("Title Scene",new TitleScene);

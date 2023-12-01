@@ -8,12 +8,16 @@ GameManager::GameManager(Entity* parent)
 {
 	score = 0;
 	currentIndex = 0;
+	textRenderer = m_Entity->AddComponent<TextRenderer>();
+	textRenderer->InitText("assets/arcade.ttf",std::to_string(score), 50, 360,768);
+	//textRenderer2 = m_Entity->AddComponent<TextRenderer>();
+	//textRenderer2->InitText("assets/arcade.ttf", "score ", 50, 150, 768);
 }
 
 void GameManager::OnNotify(const int& value)
 {
 	score = value;
-	textRenderer->InitText("assets/arcade.ttf", std::to_string(score), 50, 360, 768);
+	textRenderer->InitText("assets/arcade.ttf" ,std::to_string(score), 50, 360, 768);
 }
 size_t id;
 void GameManager::Draw()
@@ -72,10 +76,6 @@ void GameManager::Update(float dt)
 
 void GameManager::Start()
 {
-	textRenderer = m_Entity->AddComponent<TextRenderer>();
-	textRenderer->InitText("assets/arcade.ttf",std::to_string(score), 50, 360,768);
-	textRenderer2 = m_Entity->AddComponent<TextRenderer>();
-	textRenderer2->InitText("assets/arcade.ttf", "score ", 50, 150, 768);
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/game_start.wav"));
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/siren_1.wav"));
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/siren_2.wav"));

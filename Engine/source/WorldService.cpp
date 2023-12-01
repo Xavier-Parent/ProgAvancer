@@ -1,12 +1,5 @@
 #include "WorldService.h"
 
-WorldService::WorldService()
-{
-}
-WorldService::~WorldService()
-{
-}
-
 void WorldService::Update(float dt)
 {
 	for (auto entity : m_EntityInWorld)
@@ -31,7 +24,6 @@ void WorldService::Load(const std::string& scene)
 {
 	if(m_Scenes[scene] != m_CurrentScene)
 	{
-		//Unload();
 		if (m_CurrentScene != nullptr) {
 			for (auto entity : m_EntityInWorld) {
 				entity->Destroy();
@@ -139,7 +131,6 @@ void WorldService::CleanEntities()
 				}
 			}
 		}
-
 		_trash.clear();
 	}
 }
@@ -155,7 +146,6 @@ void WorldService::StartEntities()
 		{
 			if (m_EntityMap.count(entity->GetName()) > 0)
 			{
-				//Engine::Get().Logger().LogWarning("Not adding entity with same name");
 				continue;
 			}
 

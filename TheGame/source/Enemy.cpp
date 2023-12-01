@@ -48,12 +48,11 @@ void Enemy::CheckPlayerCollisions()
 }
 
 
-void Enemy::OnNotify(const bool& value)
+void Enemy::OnNotify(const Player_Action& value)
 {
-
-	powerUp = !powerUp;
-	if (powerUp == true)
-	{
+	std::cout << value.hasPowerup;
+	if (value.hasPowerup == true)
+	{		
 		animation->Stop();
 		enemySpeed = weakenSpeed;
 		animation->Play("ghostDead", true);
@@ -62,6 +61,10 @@ void Enemy::OnNotify(const bool& value)
 	{
 		animation->Stop();
 		enemySpeed = normalSpeed;
+	}
+	if (value.isDead == true)
+	{
+		m_Entity->SetPosition(300, 300);
 	}
 }
 

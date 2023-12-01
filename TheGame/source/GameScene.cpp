@@ -7,7 +7,6 @@
 #include "TileMap.h"
 #include "TextRenderer.h"
 #include "GameManager.h"
-
 using namespace homer;
 void GameScene::Load()
 {
@@ -56,10 +55,10 @@ void GameScene::Load()
 	Engin::Get()->Collider().AddToLayer("EnemyLayer", clyde);
 	animationClyde->InitAnimation("assets/sprite/clyde.png", 16, 1, 16, 16);
 
-	P->OnStateChanged.AddListener(E);
-	P->OnStateChanged.AddListener(E2);
-	P->OnStateChanged.AddListener(E3);
-	P->OnStateChanged.AddListener(E4);
+	P->action.AddListener(E);
+	P->action.AddListener(E2);
+	P->action.AddListener(E3);
+	P->action.AddListener(E4);
 
 	Entity* gameManager = Engin::Get()->World().Create("gameManager");	
 	GameManager* M = gameManager->AddComponent<GameManager>();

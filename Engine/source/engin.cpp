@@ -19,7 +19,6 @@ bool Engin::Init(const char* name, int w, int h) {
 	m_IsInit = true;
 	m_Graphics = new SDLGraphics();
 	m_Audio = new SDLAudio();
-	//m_Collider = new Collider();
 	m_Graphics->Initialize(name, w, h);
 	m_World = new WorldService();
 	m_Collider = new Collision();
@@ -121,6 +120,11 @@ void Engin::ShutDown(void)
 	if (m_Logger != nullptr)
 	{
 		delete m_Logger;
+	}
+
+	if (m_Collider != nullptr)
+	{
+		delete m_Collider;
 	}
 	//SDL_Quit();
 }

@@ -29,6 +29,9 @@ PlayerController::PlayerController(Entity* entity)
 	beenCall = false;
 }
 
+PlayerController::~PlayerController()
+{
+}
 
 void PlayerController::EnemyCollisions()
 {
@@ -36,6 +39,15 @@ void PlayerController::EnemyCollisions()
 	OnEatDot.Invoke(collectable);
 }
 
+
+void PlayerController::Start()
+{
+	CreateColliders();
+	musicId = Engin::Get()->Audio().LoadMusic("assets/audio/power_pellet.wav");
+	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_1.wav"));
+	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_2.wav"));
+	m_Entity->SetPosition(x, y);
+}
 
 void PlayerController::CheckCollision()
 {
@@ -104,98 +116,107 @@ void PlayerController::CheckCollision()
 		y = colY - 26;
 	}
 }
+bool playerDead;
 void PlayerController::PlayerDead()
 {
+	Player_Action _action = { 0 };
+	playerDead = true;
+	_action.isDead = playerDead;
+	action.Invoke(_action);
 	playerSpeed = 0;
-	animation->Play("Dead", false);
-}
-PlayerController::~PlayerController()
-{
+	animation->Play("Dead",false);
 }
 
 void PlayerController::Update(float dt)
 {
-	x = m_Entity->GetX();
-	y = m_Entity->GetY();
-	if (powerUp == true)
+	Player_Action act = { 0 };
+	act.hasPowerup = powerUp;
+
+	if (playerDead == false)
 	{
-		if (beenCall == false)
+		x = m_Entity->GetX();
+		y = m_Entity->GetY();
+		if (powerUp == true)
 		{
-			OnStateChanged.Invoke(powerUp);
-			beenCall = true;
+			if (beenCall == false)
+			{
+				action.Invoke(act);
+				beenCall = true;
+			}
+			animation->speed = 3;
+			timer += dt;
+			if (timer >= powerUpTime)
+			{
+				powerUp = false;
+				Engin::Get()->Audio().StopMusic();
+				beenCall = false;
+				act.hasPowerup = powerUp;
+				action.Invoke(act);
+				timer = 0;
+			}
 		}
-		animation->speed = 3;
-		timer += dt;
-		if (timer >= powerUpTime)
+		else
 		{
-			Engin::Get()->Audio().StopMusic();
-			powerUp = !powerUp;
-			OnStateChanged.Invoke(powerUp);
-			beenCall = false;
-			timer = 0;
+			animation->speed = 1;
 		}
-	}
-	else
-	{
-		animation->speed = 1;
-	}
-	CheckCollision();
-	MovementState newMovementState = currentMovementState;
-	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_D) && goRight == true) {
-		newMovementState = MovementState::MOVE_RIGHT;
-	}
-	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_A) && goLeft == true) {
-		newMovementState = MovementState::MOVE_LEFT;
-	}
-	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_W) && goUp == true) {
-		newMovementState = MovementState::MOVE_UP;
-	}
-	if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_S) && goDown == true) {
-		newMovementState = MovementState::MOVE_DOWN;
-	}
-
-	switch (currentMovementState) {
-	case MovementState::MOVE_RIGHT:
-		x += playerSpeed * dt;
-		animation->Play("Right", true);
-		if (x > 712) {
-			x = -36;
+		CheckCollision();
+		MovementState newMovementState = currentMovementState;
+		if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_D) && goRight == true) {
+			newMovementState = MovementState::MOVE_RIGHT;
 		}
-		break;
-	case MovementState::MOVE_LEFT:
-		x -= playerSpeed * dt;
-		animation->Play("Left", true);
-		if (x < -36) {
-			x = 712;
+		if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_A) && goLeft == true) {
+			newMovementState = MovementState::MOVE_LEFT;
 		}
-		break;
-	case MovementState::MOVE_UP:
-		y -= playerSpeed * dt;
-		animation->Play("Up", true);
-		break;
-	case MovementState::MOVE_DOWN:
-		y += playerSpeed * dt;
-		animation->Play("Down", true);
-		break;
-	case MovementState::IDLE:
-		break;
-	default:
-		break;
-	}
+		if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_W) && goUp == true) {
+			newMovementState = MovementState::MOVE_UP;
+		}
+		if (Engin::Get()->Input().IsKeyDown(EKey::EKEY_S) && goDown == true) {
+			newMovementState = MovementState::MOVE_DOWN;
+		}
 
-	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
-	if (collisionDirection != EDirections::NONE) {
-		currentMovementState = MovementState::IDLE;
-	}
-	else {
-		currentMovementState = newMovementState;
-	}
+		switch (currentMovementState) {
+		case MovementState::MOVE_RIGHT:
+			x += playerSpeed * dt;
+			animation->Play("Right", true);
+			if (x > 712) {
+				x = -36;
+			}
+			break;
+		case MovementState::MOVE_LEFT:
+			x -= playerSpeed * dt;
+			animation->Play("Left", true);
+			if (x < -36) {
+				x = 712;
+			}
+			break;
+		case MovementState::MOVE_UP:
+			y -= playerSpeed * dt;
+			animation->Play("Up", true);
+			break;
+		case MovementState::MOVE_DOWN:
+			y += playerSpeed * dt;
+			animation->Play("Down", true);
+			break;
+		case MovementState::IDLE:
+			break;
+		default:
+			break;
+		}
 
-	m_Entity->SetPosition(x, y);
-	upCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() - 16);
-	downCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() + 16);
-	rightCollider->SetPosition(m_Entity->GetX() + 16, m_Entity->GetY());
-	leftCollider->SetPosition(m_Entity->GetX() - 16, m_Entity->GetY());
+		EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
+		if (collisionDirection != EDirections::NONE) {
+			currentMovementState = MovementState::IDLE;
+		}
+		else {
+			currentMovementState = newMovementState;
+		}
+
+		m_Entity->SetPosition(x, y);
+		upCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() - 16);
+		downCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() + 16);
+		rightCollider->SetPosition(m_Entity->GetX() + 16, m_Entity->GetY());
+		leftCollider->SetPosition(m_Entity->GetX() - 16, m_Entity->GetY());
+	}
 }
 
 
@@ -213,14 +234,6 @@ void PlayerController::CreateColliders() {
 	leftCollider = CreateAndSetupCollider("leftCollider", -offset, 0);
 }
 
-void PlayerController::Start()
-{
-	CreateColliders();
-	musicId = Engin::Get()->Audio().LoadMusic("assets/audio/power_pellet.wav");
-	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_1.wav"));
-	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_2.wav"));
-	m_Entity->SetPosition(x, y);
-}
 
 void PlayerController::Destroy()
 {

@@ -5,6 +5,10 @@ class IWorld
 {
 public:
 	/// <summary>
+	/// Destructor by default
+	/// </summary>
+	virtual ~IWorld() = default;
+	/// <summary>
 	/// Register 
 	/// </summary>
 	/// <param name="name">Set the name of the scene</param>

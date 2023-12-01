@@ -4,10 +4,13 @@ using namespace homer;
 TextRenderer::TextRenderer(Entity* entity)
 	:Component(entity)
 {
+	Y = 0;
+	X = 0;
 	h = 0;
 	w = 0;
 	id = 0;
 	square = RectF();
+	color = nullptr;
 }
 
 TextRenderer::~TextRenderer()

@@ -55,7 +55,6 @@ bool Collision::CheckRectCircle(float rx, float ry, float rw, float rh, float cx
 
 void Collision::AddToLayer(const std::string& layerName, Entity* entity)
 {
-    std::cout << "VaginPoilu";
     if (m_Layers.count(layerName) == 0)
     {
         m_Layers.emplace(layerName, std::vector<Entity*>());

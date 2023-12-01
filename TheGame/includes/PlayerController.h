@@ -3,6 +3,8 @@
 #include "engin.h"
 #include "TileMap.h"
 #include "Subject.h"
+#include "Action.h"
+
 class PlayerController : public Component , public IUpdatable{
 
 	enum class MovementState {
@@ -58,7 +60,7 @@ public:
 	 /// <summary>
 	 /// Action to let know the enemy when they are weak
 	 /// </summary>
-	 Subject<bool> OnStateChanged;
+	 Subject<Player_Action> action;
 	 /// <summary>
 	 /// Action who give the Current score to the GameManager
 	 /// </summary>

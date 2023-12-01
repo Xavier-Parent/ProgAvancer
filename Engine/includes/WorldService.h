@@ -6,13 +6,9 @@
 class WorldService : public IWorld{
 public:
 	/// <summary>
-	/// Constructor by Default
-	/// </summary>
-	WorldService();
-	/// <summary>
 	/// Destructor by Default
 	/// </summary>
-	~WorldService();
+	~WorldService() = default;
 	/// <summary>
 	/// Function to register a new scene
 	/// </summary>
@@ -73,5 +69,5 @@ private:
 	std::vector<Entity*> m_EntityToRemove;
 	std::vector<Entity*> m_EntityToStart;
 	std::map<std::string, Entity*> m_EntityMap;
-	IScene* m_CurrentScene = nullptr;
+	IScene* m_CurrentScene;
 };

@@ -13,7 +13,7 @@ Animation::Animation(Entity* entity) : SpriteRenderer(entity)
 	timer = 0;
 	speed = 1;
 }
-
+bool isPlaying;
 Animation::~Animation()
 {
 }
@@ -36,21 +36,23 @@ void Animation::AddClip(const std::string& name, int start, int count, float del
 void Animation::Update(float dt)
 {
 	timer += dt * speed;
-	if (timer > currentClip._delay)
+	if (isPlaying == true)
 	{
-		timer = 0;
-		index++;
-		if (index >= currentClip._start + currentClip._count)
+		if (timer > currentClip._delay)
 		{
-			index = currentClip._start;
-			if (!loop) {
-				Stop();
+			timer = 0;
+			index++;
+			if (index >= currentClip._start + currentClip._count)
+			{
+				index = currentClip._start;
+				if (loop == false) {
+					Stop();
+					isPlaying == false;
+				}
 			}
+			frame.x = (index % columns) * frame.w;
+			frame.y = (index / columns) * frame.h;
 		}
-
-		frame.x = (index % columns) * frame.w;
-		frame.y = (index / columns) * frame.h;
-
 	}
 }
 
@@ -77,6 +79,7 @@ void Animation::Play(const std::string& name, bool loop)
 
 	if (clipMap.count(name) > 0)
 	{
+		isPlaying = true;
 		currentClip = clipMap[name];
 		index = currentClip._start;
 		frame.x = (index % columns) * frame.w;

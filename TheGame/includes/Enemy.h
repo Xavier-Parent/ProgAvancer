@@ -3,7 +3,9 @@
 #include "engin.h"
 #include "TileMap.h"
 #include "Observer.h"
-class Enemy: public Component, public IUpdatable, public Observer<bool> {
+#include "Action.h"
+
+class Enemy: public Component, public IUpdatable, public Observer<Player_Action> {
 
 	enum class MovementState {
 		IDLE,
@@ -23,7 +25,7 @@ public:
 	/// Destructor
 	/// </summary>
 	~Enemy();
-	virtual void OnNotify(const bool& value);
+	virtual void OnNotify(const Player_Action& value);
 	/// <summary>
 	/// Function Start
 	/// </summary>
