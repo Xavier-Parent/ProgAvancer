@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "BoxCollider.h"
 #include "PlayerController.h"
 using namespace homer;
 Enemy::Enemy(Entity* entity)
@@ -22,10 +21,7 @@ Enemy::Enemy(Entity* entity)
 	animation->AddClip("ghostLeft", 2, 2, 0.1f);
 	animation->AddClip("ghostUp", 4, 2, 0.1f);
 	animation->AddClip("ghostDown", 6, 2, 0.1f);
-
-
 	animation->AddClip("ghostDead", 8, 2, 0.1f);
-
 }
 
 Enemy::~Enemy()
@@ -41,7 +37,7 @@ void Enemy::CheckPlayerCollisions()
 		if (powerUp == true)
 		{
 			m_Entity->SetPosition(310, 310);
-			Player->GetComponent<PlayerController>()->CheckEnemyCollisions();
+			Player->GetComponent<PlayerController>()->EnemyCollisions();
 		}
 		else
 		{
@@ -54,6 +50,7 @@ void Enemy::CheckPlayerCollisions()
 
 void Enemy::OnNotify(const bool& value)
 {
+
 	powerUp = !powerUp;
 	if (powerUp == true)
 	{
@@ -70,7 +67,6 @@ void Enemy::OnNotify(const bool& value)
 
 void Enemy::Start()
 {
-	//m_Entity->SetPosition(x, y);
 	currentMovementState = MovementState::MOVE_DOWN;
 	CreateColliders();
 }
@@ -78,7 +74,6 @@ void Enemy::Start()
 void Enemy::Update(float dt)
 {
 	CheckPlayerCollisions();
-	//std::cout << powerUp;
 	x = m_Entity->GetX();
 	y = m_Entity->GetY();
 	int colIndex;
@@ -88,8 +83,6 @@ void Enemy::Update(float dt)
 
 	MovementState newMovementState = currentMovementState;
 	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
-
-
 
 	if (collisionDirection != EDirections::NONE) {
 		ChooseRandomDirection();

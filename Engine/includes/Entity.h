@@ -94,11 +94,21 @@ public:
 	/// <param name="x">Set the X position who is the Horizontal value</param>
 	/// <param name="y">Set the Y position who is the Vertical value</param>
 	void SetPosition(float x,float y );
+	/// <summary>
+	/// Function to Get the position of the Entity in the world
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
 	void GetPosition(float* x, float* y)
 	{
 		*x = X;
 		*y = Y;
 	}
+	/// <summary>
+	///  Function to Get the Size of the Entity in the world
+	/// </summary>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
 	void GetSize(float* w, float* h)
 	{
 		*w = m_Width;

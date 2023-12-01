@@ -8,7 +8,6 @@ GameManager::GameManager(Entity* parent)
 {
 	score = 0;
 	currentIndex = 0;
-	//Text->AddComponent<TextRenderer>()->InitText("assets/arcade.ttf", "J'aime les fruits", 50);
 }
 
 void GameManager::OnNotify(const int& value)
@@ -30,47 +29,49 @@ float timere = 0;
 void GameManager::Update(float dt)
 {
 	timere += dt;
-	//std::cout << timere << std::endl;
-	if (timere >= 3 && first == false)
+	if(timere >= 4)
 	{
-		Engin::Get()->Audio().StopMusic();
-		currentIndex = 1;
-		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		first = true;
-	}
-	if (timere >= 12 && second == false)
-	{
-		Engin::Get()->Audio().StopMusic();
-		currentIndex = 2;
-		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		second = true;
-	}
-	if (timere >= 24 && third == false)
-	{
-		Engin::Get()->Audio().StopMusic();
-		currentIndex = 3;
-		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		third = true;
-	}
-	if (timere >= 36 && fourth == false)
-	{
-		Engin::Get()->Audio().StopMusic();
-		currentIndex = 4;
-		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		fourth = true;
-	}
-	if (timere >= 48 && five == false)
-	{
-		Engin::Get()->Audio().StopMusic();
-		currentIndex = 5;
-		Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
-		five = true;
+		if (score < 500 && first == false)
+		{
+			Engin::Get()->Audio().StopMusic();
+			currentIndex = 1;
+			Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
+			first = true;
+		}
+		if (score < 1000 && score >= 500 && second == false)
+		{
+			Engin::Get()->Audio().StopMusic();
+			currentIndex = 2;
+			Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
+			second = true;
+		}
+		if (score < 1500 && score >= 1000 && third == false)
+		{
+			Engin::Get()->Audio().StopMusic();
+			currentIndex = 3;
+			Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
+			third = true;
+		}
+		if (score < 2000 && score >= 1500 && fourth == false)
+		{
+			Engin::Get()->Audio().StopMusic();
+			currentIndex = 4;
+			Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
+			fourth = true;
+		}
+		if (score > 2000 && five == false)
+		{
+			Engin::Get()->Audio().StopMusic();
+			currentIndex = 5;
+			Engin::Get()->Audio().PlayMusic(musicIds[currentIndex]);
+			five = true;
+		}
 	}
 }
 
+
 void GameManager::Start()
 {
-	
 	textRenderer = m_Entity->AddComponent<TextRenderer>();
 	textRenderer->InitText("assets/arcade.ttf",std::to_string(score), 50, 360,768);
 	textRenderer2 = m_Entity->AddComponent<TextRenderer>();
@@ -84,8 +85,6 @@ void GameManager::Start()
 	musicIds.push_back(Engin::Get()->Audio().LoadMusic("assets/audio/retreating.wav"));
 	currentIndex = 0;
 	Engin::Get()->Audio().PlayMusic(musicIds[currentIndex],0);
-
-
 }
 
 void GameManager::Destroy()

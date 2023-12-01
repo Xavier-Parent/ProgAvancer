@@ -1,6 +1,5 @@
 #include "TileMap.h"
 #include "engin.h"
-#include "BoxCollider.h"
 //#include <iostream>
 #include <fstream>
 #include <sstream>

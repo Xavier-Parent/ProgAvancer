@@ -92,7 +92,6 @@ void WorldService::Remove(Entity* entity)
 	}
 }
 
-// test de fonction a partir de ici
 void WorldService::Unload()
 {
 	for (auto entity : m_EntityInWorld)

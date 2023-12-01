@@ -5,7 +5,6 @@
 #include "SpriteRenderer.h"
 #include "Animation.h"
 #include "TileMap.h"
-#include "BoxCollider.h"
 #include "TextRenderer.h"
 #include "GameManager.h"
 
@@ -27,7 +26,6 @@ void GameScene::Load()
 	animation = pacMan->AddComponent<Animation>();
 	Engin::Get()->Collider().AddToLayer("PlayerLayer", pacMan);
 	PlayerController* P =  pacMan->AddComponent<PlayerController>();
-	
 	animation->InitAnimation("assets/sprite/pacManClean.png", 14, 4, 16, 16);
 
 	Entity* Blinky = Engin::Get()->World().Create("Blinky");
@@ -51,7 +49,6 @@ void GameScene::Load()
 	Engin::Get()->Collider().AddToLayer("EnemyLayer", pinky);
 	animationPinky->InitAnimation("assets/sprite/pinky.png", 16, 1, 16, 16);
 
-
 	Entity* clyde = Engin::Get()->World().Create("clyde");
 	clyde->SetPosition(310, 310);
 	Animation* animationClyde = clyde->AddComponent<Animation>();
@@ -64,11 +61,7 @@ void GameScene::Load()
 	P->OnStateChanged.AddListener(E3);
 	P->OnStateChanged.AddListener(E4);
 
-	Entity* gameManager = Engin::Get()->World().Create("gameManager");
-	
+	Entity* gameManager = Engin::Get()->World().Create("gameManager");	
 	GameManager* M = gameManager->AddComponent<GameManager>();
 	P->OnEatDot.AddListener(M);
-
-
-
 }

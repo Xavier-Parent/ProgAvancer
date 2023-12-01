@@ -31,12 +31,11 @@ public:
 	/// </summary>
 	virtual void Destroy() override;
 	/// <summary>
-	/// Initialisation of the Sprite
+	/// Initialisation of the text
 	/// </summary>
 	/// <param name="filename">The file string where the sprite is</param>
 	/// <param name="w">The width of the sprite</param>
 	/// <param name="h">Height of the sprite</param>
-
 	void InitText(const std::string& fontfilename,const std::string& text, float fontSize, float x , float y);
 private:
 	std::string file;

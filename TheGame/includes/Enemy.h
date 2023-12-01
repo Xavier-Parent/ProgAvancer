@@ -3,7 +3,7 @@
 #include "engin.h"
 #include "TileMap.h"
 #include "Observer.h"
-class Enemy : public Component, public IUpdatable, public Observer<bool> {
+class Enemy: public Component, public IUpdatable, public Observer<bool> {
 
 	enum class MovementState {
 		IDLE,
@@ -36,31 +36,51 @@ public:
 	/// Function to Destroy
 	/// </summary>
 	virtual void Destroy() override;
+	/// <summary>
+	/// Function to check the collision of Wall to better control the player
+	/// </summary>
 	void CheckCollision();
+	/// <summary>
+	/// Prepare the collider around the Character to know wich way to go
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="xOffset"></param>
+	/// <param name="yOffset"></param>
+	/// <returns></returns>
 	Entity* CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset);
+	/// <summary>
+	/// Create the collider around the character
+	/// </summary>
 	void CreateColliders();
+	/// <summary>
+	/// Make the Enemy choose a direction he can go
+	/// </summary>
 	void ChooseRandomDirection();
+	/// <summary>
+	/// Detect the collision with the player Layer
+	/// </summary>
 	void CheckPlayerCollisions();
 private:
-	bool powerUp;
 	float enemySpeed;
 	float normalSpeed;
 	float weakenSpeed;
 	float x, y;
+	
+	bool powerUp;
 	bool goUp;
 	bool goDown;
 	bool goRight;
 	bool goLeft;
-
 	bool isWeak;
+
 
 	int colIndex;
 	int colX;
 	int colY;
+	int currentSoundIndex;
 
 	size_t musicId;
 	std::vector<size_t> soundIds;
-	int currentSoundIndex;
 	MovementState currentMovementState;
 
 	Entity* upCollider = nullptr;

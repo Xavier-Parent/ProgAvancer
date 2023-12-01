@@ -41,13 +41,21 @@ public:
 	/// <param name="name"></param>
 	/// <returns></returns>
 	virtual Entity* Create(const std::string& name) = 0;
-
+	/// <summary>
+	/// Function to Unload the Entity in the world
+	/// </summary>
 	virtual void Unload() = 0;
-
+	/// <summary>
+	/// Function to Clean the Entity in the World
+	/// </summary>
 	virtual void CleanEntities() = 0;
-
+	/// <summary>
+/// Enable the start function of the Entity
+/// </summary>
 	virtual void StartEntities() = 0;
-
+	/// <summary>
+	/// Function to Unload the Scene and delete them
+	/// </summary>
 	virtual void Shutdown() = 0;
 };
 

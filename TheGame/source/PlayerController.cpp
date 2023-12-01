@@ -1,5 +1,4 @@
 #include "PlayerController.h"
-#include "BoxCollider.h"
 using namespace homer;
 
 PlayerController::PlayerController(Entity* entity)
@@ -8,7 +7,6 @@ PlayerController::PlayerController(Entity* entity)
 	x = 348;
 	y = 529;
 	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
-
 	animation = m_Entity->GetComponent<Animation>();
 	animation->AddClip("Right", 0, 4, 0.1f);
 	animation->AddClip("Left", 14, 4, 0.1f);
@@ -22,20 +20,21 @@ PlayerController::PlayerController(Entity* entity)
 	goDown = false;
 	goRight = false;
 	goLeft = false;
-
 	colIndex = 0;
 	colX = 0;
 	colY = 0;
-
+	collectable = 0;
+	powerUpTime = 6;
+	timer = 0;
+	beenCall = false;
 }
 
-int collectable;
-void PlayerController::CheckEnemyCollisions()
+
+void PlayerController::EnemyCollisions()
 {
-	collectable += 20;
+	collectable += 200;
 	OnEatDot.Invoke(collectable);
 }
-
 
 
 void PlayerController::CheckCollision()
@@ -76,7 +75,7 @@ void PlayerController::CheckCollision()
 
 	if (tileMap->IsColliding("Collectable", m_Entity, &colIndex, &colX, &colY))
 	{
-		collectable++;
+		collectable += 10;
 		OnEatDot.Invoke(collectable);
 		size_t currentSoundId = soundIds[currentSoundIndex];
 		Engin::Get()->Audio().PlaySFX(currentSoundId);
@@ -108,16 +107,12 @@ void PlayerController::CheckCollision()
 void PlayerController::PlayerDead()
 {
 	playerSpeed = 0;
-	animation->Play("Dead",false);
+	animation->Play("Dead", false);
 }
 PlayerController::~PlayerController()
 {
 }
 
-float powerUpTime = 6;
-float timer = 0;
-bool testBool;
-bool beenCall;
 void PlayerController::Update(float dt)
 {
 	x = m_Entity->GetX();
@@ -131,7 +126,6 @@ void PlayerController::Update(float dt)
 		}
 		animation->speed = 3;
 		timer += dt;
-		//std::cout << timer;
 		if (timer >= powerUpTime)
 		{
 			Engin::Get()->Audio().StopMusic();
@@ -188,7 +182,7 @@ void PlayerController::Update(float dt)
 	default:
 		break;
 	}
-	
+
 	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
 	if (collisionDirection != EDirections::NONE) {
 		currentMovementState = MovementState::IDLE;
@@ -207,7 +201,6 @@ void PlayerController::Update(float dt)
 
 Entity* PlayerController::CreateAndSetupCollider(const std::string& name, int xOffset, int yOffset) {
 	Entity* collider = Engin::Get()->World().Create(name);
-	//collider->AddComponent<BoxCollider>();
 	collider->SetPosition(m_Entity->GetX() + xOffset, m_Entity->GetY() + yOffset);
 	return collider;
 }
@@ -223,7 +216,6 @@ void PlayerController::CreateColliders() {
 void PlayerController::Start()
 {
 	CreateColliders();
-
 	musicId = Engin::Get()->Audio().LoadMusic("assets/audio/power_pellet.wav");
 	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_1.wav"));
 	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_2.wav"));

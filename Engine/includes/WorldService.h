@@ -50,19 +50,26 @@ public:
 	/// <param name="name">The Entity</param>
 	/// <returns></returns>
 	virtual Entity* Create(const std::string& name) override;
-
+	/// <summary>
+	/// Function to Unload the Entity in the world
+	/// </summary>
 	void Unload();
-	
+	/// <summary>
+	/// Function to Clean the Entity in the World
+	/// </summary>
 	virtual void CleanEntities();
-
+	/// <summary>
+	/// Enable the start function of the Entity
+	/// </summary>
 	virtual void StartEntities();
-
+	/// <summary>
+	/// Function to Unload the Scene and delete them
+	/// </summary>
 	virtual void Shutdown();
 
 private:
 	std::map<std::string, IScene*> m_Scenes;
 	std::vector<Entity*> m_EntityInWorld;
-	//std::vector<Entity*> m_EntityInWorld;
 	std::vector<Entity*> m_EntityToRemove;
 	std::vector<Entity*> m_EntityToStart;
 	std::map<std::string, Entity*> m_EntityMap;

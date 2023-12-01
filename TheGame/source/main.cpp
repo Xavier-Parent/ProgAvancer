@@ -14,7 +14,7 @@ void InitGameplay(void) {
 }
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
 	Engin* theEngine = Engin::Get();
-	if (theEngine->Init("TestGame", 720, 840)) {
+	if (theEngine->Init("PacMan", 720, 840)) {
 		InitGameplay();
 		theEngine->Start();
 	}
