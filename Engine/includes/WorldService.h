@@ -69,5 +69,5 @@ private:
 	std::vector<Entity*> m_EntityToRemove;
 	std::vector<Entity*> m_EntityToStart;
 	std::map<std::string, Entity*> m_EntityMap;
-	IScene* m_CurrentScene;
+	IScene* m_CurrentScene = nullptr;
 };

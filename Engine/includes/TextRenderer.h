@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	/// Destructor
 	/// </summary>
-	~TextRenderer();
+	virtual ~TextRenderer() = default;
 	/// <summary>
 	/// Function draw
 	/// </summary>
@@ -36,7 +36,7 @@ public:
 	/// <param name="filename">The file string where the sprite is</param>
 	/// <param name="w">The width of the sprite</param>
 	/// <param name="h">Height of the sprite</param>
-	void InitText(const std::string& fontfilename,const std::string& text, float fontSize, float x , float y);
+	void InitText(const std::string& fontfilename,const std::string& text, int fontSize, float x , float y);
 private:
 	std::string file;
 	std::string currentText;

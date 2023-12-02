@@ -93,5 +93,5 @@ private:
     int m_TileWidth = 0;
     int m_TileHeight = 0;
     TTileset m_Tileset;
-    float m_ScaleFactor = 3;
+    int m_ScaleFactor = 3;
 };

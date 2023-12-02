@@ -27,7 +27,10 @@ public:
 	/// <param name="filename">The path to find the file for the sound</param>
 	/// <returns></returns>
 	virtual size_t LoadSound(const std::string& filename) override;
-
+	/// <summary>
+	/// Function to play music
+	/// </summary>
+	/// <param name="id"></param>
 	virtual void PlayMusic(size_t id) override;
 	/// <summary>
 	/// Function to play the corect music using an ID

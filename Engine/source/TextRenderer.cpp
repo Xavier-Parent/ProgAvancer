@@ -13,9 +13,6 @@ TextRenderer::TextRenderer(Entity* entity)
 	color = nullptr;
 }
 
-TextRenderer::~TextRenderer()
-{
-}
 void TextRenderer::Draw()
 {
 	square.x = m_Entity->GetX();
@@ -33,7 +30,7 @@ void TextRenderer::Destroy()
 {
 }
 
-void TextRenderer::InitText(const std::string& fontfilename,const std::string& text, float fontSize, float x,float y)
+void TextRenderer::InitText(const std::string& fontfilename,const std::string& text, int fontSize, float x,float y)
 {
 	X = x;
 	Y = y;

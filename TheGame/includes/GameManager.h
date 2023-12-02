@@ -3,7 +3,8 @@
 #include <Observer.h>
 #include <vector>
 #include "TextRenderer.h"
-class GameManager : public Component, public IUpdatable, public IDrawable, public Observer<int> {
+#include "Action.h"
+class GameManager : public Component, public IUpdatable, public IDrawable, public Observer<Game_State> {
 public:
     /// <summary>
     /// Destructor by default
@@ -22,7 +23,7 @@ public:
     /// The Action that is called by the player to the Game Manager
     /// </summary>
     /// <param name="value">The score of the player</param>
-    virtual void OnNotify(const int& value);
+    virtual void OnNotify(const Game_State& value);
     /// <summary>
     /// Function to draw
     /// </summary>
@@ -43,7 +44,11 @@ public:
 private:
     TextRenderer* textRenderer;
     TextRenderer* textRenderer2;
+    TextRenderer* textRenderer3;
+    TextRenderer* textRenderer4;
+    TextRenderer* textRenderer5;
+    bool gameFinish;
     int score;
-    std::vector<size_t> musicIds;
     int currentIndex;
+    std::vector<size_t> musicIds;
 };

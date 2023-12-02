@@ -85,4 +85,8 @@ public:
 	/// </summary>
 	/// <param name="entity"></param>
 	virtual void Remove(Entity* entity) = 0;
+	/// <summary>
+	/// Clear the collider
+	/// </summary>
+	virtual void Clear() = 0;
 };

@@ -58,33 +58,37 @@ public:
 	 /// </summary>
 	 void PlayerDead();
 	 /// <summary>
-	 /// Action to let know the enemy when they are weak
+	 /// Struct of action to talk to the ennemy
 	 /// </summary>
-	 Subject<Player_Action> action;
+	 Subject<Player_Action> playerAction;
 	 /// <summary>
-	 /// Action who give the Current score to the GameManager
+	 /// Struct of action to talk to the GameManager
 	 /// </summary>
-	 Subject<int> OnEatDot;
+	 Subject<Game_State> gameState;
 private:
 	float playerSpeed;
 	float powerUpTime;
 	float timer;
-	float x,y;
-
+	float x, y;
+	bool end;
 	bool powerUp;
 	bool goUp;
 	bool goDown;
 	bool goRight;
 	bool goLeft;
 	bool beenCall;
-
+	bool playerDead;
+	bool playerWin;
 	int collectable;
 	int colIndex;
 	int colX;
 	int colY;
 	int currentSoundIndex;
+	int totalPoint;
 
 	size_t musicId;
+	size_t deadMusic;
+	size_t deadSound;
 	std::vector<size_t> soundIds;
 	MovementState currentMovementState;
 

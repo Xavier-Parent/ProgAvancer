@@ -47,7 +47,7 @@ void Animation::Update(float dt)
 				index = currentClip._start;
 				if (loop == false) {
 					Stop();
-					isPlaying == false;
+					isPlaying = false;
 				}
 			}
 			frame.x = (index % columns) * frame.w;
@@ -61,8 +61,8 @@ void Animation::Draw()
 	RectF square = RectF();
 	square.x = m_Entity->GetX();
 	square.y = m_Entity->GetY();
-	square.h = frame.h * 2;
-	square.w = frame.w * 2;
+	square.h = frame.h * 2.0f;
+	square.w = frame.w * 2.0f;
 	Engin::Get()->Graphics().DrawTexture(id, frame, square, 0, Flip(), Color::Red);
 }
 

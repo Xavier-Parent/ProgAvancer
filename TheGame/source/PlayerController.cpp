@@ -12,7 +12,7 @@ PlayerController::PlayerController(Entity* entity)
 	animation->AddClip("Left", 14, 4, 0.1f);
 	animation->AddClip("Up", 28, 4, 0.1f);
 	animation->AddClip("Down", 42, 4, 0.1f);
-	animation->AddClip("Dead", 4, 10, 0.2f);
+	animation->AddClip("Dead", 4, 10, 0.3f);
 	playerSpeed = 150;
 	currentSoundIndex = 0;
 	powerUp = false;
@@ -20,13 +20,21 @@ PlayerController::PlayerController(Entity* entity)
 	goDown = false;
 	goRight = false;
 	goLeft = false;
+	beenCall = false;
+	playerDead = false;
+	playerWin = false;
+	end = false;
 	colIndex = 0;
 	colX = 0;
 	colY = 0;
 	collectable = 0;
 	powerUpTime = 6;
 	timer = 0;
-	beenCall = false;
+	totalPoint = 0;
+	musicId = 0;
+	deadMusic = 0;
+	deadSound = 0;
+	currentMovementState = MovementState::IDLE;
 }
 
 PlayerController::~PlayerController()
@@ -35,8 +43,10 @@ PlayerController::~PlayerController()
 
 void PlayerController::EnemyCollisions()
 {
+	Game_State _state;
 	collectable += 200;
-	OnEatDot.Invoke(collectable);
+	_state._collectable = collectable;
+	gameState.Invoke(_state);
 }
 
 
@@ -44,6 +54,8 @@ void PlayerController::Start()
 {
 	CreateColliders();
 	musicId = Engin::Get()->Audio().LoadMusic("assets/audio/power_pellet.wav");
+	deadMusic = Engin::Get()->Audio().LoadMusic("assets/audio/Death_1.wav");
+	deadSound = Engin::Get()->Audio().LoadSound("assets/audio/Death_2.wav");
 	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_1.wav"));
 	soundIds.push_back(Engin::Get()->Audio().LoadSound("assets/audio/munch_2.wav"));
 	m_Entity->SetPosition(x, y);
@@ -87,60 +99,86 @@ void PlayerController::CheckCollision()
 
 	if (tileMap->IsColliding("Collectable", m_Entity, &colIndex, &colX, &colY))
 	{
+		Game_State _state;
 		collectable += 10;
-		OnEatDot.Invoke(collectable);
+		_state._collectable = collectable;
+		gameState.Invoke(_state);
+		totalPoint++;
 		size_t currentSoundId = soundIds[currentSoundIndex];
 		Engin::Get()->Audio().PlaySFX(currentSoundId);
 		currentSoundIndex = (currentSoundIndex + 1) % soundIds.size();
 	}
 	if (tileMap->IsColliding("PowerUp", m_Entity, &colIndex, &colX, &colY))
 	{
+		totalPoint++;
 		Engin::Get()->Audio().PlayMusic(musicId, -1);
-		powerUp = !powerUp;
+		powerUp = true;
 	}
-
 	if (dir == RIGHT)
 	{
-		x = colX + 18;
+		x = colX + 18.0f;
 	}
 	if (dir == LEFT)
 	{
-		x = colX - 26;
+		x = colX - 26.0f;
 	}
 	if (dir == DOWN)
 	{
-		y = colY + 18;
+		y = colY + 18.0f;
 	}
 	if (dir == UP)
 	{
-		y = colY - 26;
+		y = colY - 26.0f;
 	}
 }
-bool playerDead;
 void PlayerController::PlayerDead()
 {
-	Player_Action _action = { 0 };
+	
+	Game_State _loses;
+	_loses._collectable = collectable;
+	_loses.HasLose = true;
+	_loses.hasWon = false;
+	gameState.Invoke(_loses);
+
+	Player_Action _action;
 	playerDead = true;
 	_action.isDead = playerDead;
-	action.Invoke(_action);
+	playerAction.Invoke(_action);
 	playerSpeed = 0;
-	animation->Play("Dead",false);
+	animation->Play("Dead", false);
+	Engin::Get()->Audio().StopMusic();
+	Engin::Get()->Audio().PlayMusic(deadMusic, 0);
 }
 
 void PlayerController::Update(float dt)
 {
-	Player_Action act = { 0 };
-	act.hasPowerup = powerUp;
 
-	if (playerDead == false)
+	if (totalPoint >= 244 && playerWin == false)
 	{
+		Game_State _win;
+		_win.hasWon = true;
+		_win._collectable = collectable;
+		gameState.Invoke(_win);
+		playerSpeed = 0;
+		playerWin = true;
+
+		Player_Action _action;
+		_action.isDead = true;
+		playerAction.Invoke(_action);
+	}
+	if (playerDead == false && playerWin == false)
+	{
+		Player_Action act;
+		act.hasPowerup = powerUp;
 		x = m_Entity->GetX();
 		y = m_Entity->GetY();
 		if (powerUp == true)
 		{
 			if (beenCall == false)
 			{
-				action.Invoke(act);
+
+				act.hasPowerup = powerUp;
+				playerAction.Invoke(act);
 				beenCall = true;
 			}
 			animation->speed = 3;
@@ -151,7 +189,7 @@ void PlayerController::Update(float dt)
 				Engin::Get()->Audio().StopMusic();
 				beenCall = false;
 				act.hasPowerup = powerUp;
-				action.Invoke(act);
+				playerAction.Invoke(act);
 				timer = 0;
 			}
 		}
@@ -216,6 +254,16 @@ void PlayerController::Update(float dt)
 		downCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() + 16);
 		rightCollider->SetPosition(m_Entity->GetX() + 16, m_Entity->GetY());
 		leftCollider->SetPosition(m_Entity->GetX() - 16, m_Entity->GetY());
+	}
+	if(playerDead == true)
+	{
+		timer += dt;
+		if (timer >= 3)
+		{
+			Engin::Get()->Audio().PlaySFX(deadSound, 0);
+			m_Entity->SetPosition(1000,1000);
+			playerDead = false;
+		}
 	}
 }
 

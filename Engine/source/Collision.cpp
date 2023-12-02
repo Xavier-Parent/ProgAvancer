@@ -90,6 +90,8 @@ bool Collision::CollideWithLayer(Entity* entity, const std::string& layerName, E
     return false;
 }
 
+
+
 void Collision::Remove(Entity* entity)
 {
     for (auto layer : m_Layers)
@@ -106,4 +108,9 @@ void Collision::Remove(Entity* entity)
             it++;
         }
     }
+}
+
+void Collision::Clear()
+{
+    m_Layers.clear();
 }

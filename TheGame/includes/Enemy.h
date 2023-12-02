@@ -67,14 +67,14 @@ private:
 	float normalSpeed;
 	float weakenSpeed;
 	float x, y;
-	
+
 	bool powerUp;
 	bool goUp;
 	bool goDown;
 	bool goRight;
 	bool goLeft;
 	bool isWeak;
-
+	bool playerDead;
 
 	int colIndex;
 	int colX;
@@ -82,7 +82,7 @@ private:
 	int currentSoundIndex;
 
 	size_t musicId;
-	std::vector<size_t> soundIds;
+	size_t soundIds;
 	MovementState currentMovementState;
 
 	Entity* upCollider = nullptr;

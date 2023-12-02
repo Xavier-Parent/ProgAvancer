@@ -90,6 +90,10 @@ public:
     /// </summary>
     /// <param name="entity"></param>
     virtual void Remove(Entity* entity) override;
+    /// <summary>
+    /// Clear the collider
+    /// </summary>
+    virtual void Clear() override;
 
 private:
     std::map<std::string, std::vector<Entity*>> m_Layers;

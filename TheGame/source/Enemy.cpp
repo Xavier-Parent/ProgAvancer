@@ -4,7 +4,7 @@ using namespace homer;
 Enemy::Enemy(Entity* entity)
 	:Component(entity)
 {
-	x= 0;
+	x = 0;
 	y = 0;
 	animation = m_Entity->GetComponent<Animation>();
 	tileMap = Engin::Get()->World().Find("background")->GetComponent<Tilemap>();
@@ -13,15 +13,23 @@ Enemy::Enemy(Entity* entity)
 	goRight = false;
 	goLeft = false;
 	powerUp = false;
+	playerDead = false;
+	isWeak = false;
 	normalSpeed = 125;
 	weakenSpeed = 50;
 	enemySpeed = 125;
-
+	colIndex = 0;
+	colX = 0;
+	colY = 0;
+	currentSoundIndex = 0;
+	currentMovementState = MovementState::IDLE;
 	animation->AddClip("ghostRight", 0, 2, 0.1f);
 	animation->AddClip("ghostLeft", 2, 2, 0.1f);
 	animation->AddClip("ghostUp", 4, 2, 0.1f);
 	animation->AddClip("ghostDown", 6, 2, 0.1f);
 	animation->AddClip("ghostDead", 8, 2, 0.1f);
+	musicId = 0;
+	soundIds = 0;
 }
 
 Enemy::~Enemy()
@@ -37,112 +45,122 @@ void Enemy::CheckPlayerCollisions()
 		if (powerUp == true)
 		{
 			m_Entity->SetPosition(310, 310);
+			powerUp = false;
+			enemySpeed = normalSpeed;
 			Player->GetComponent<PlayerController>()->EnemyCollisions();
+			Engin::Get()->Audio().PlaySFX(soundIds);
 		}
 		else
 		{
-			Player->GetComponent<PlayerController>()->PlayerDead();
-			enemySpeed = 0;
+			if (Player)
+			{
+				Player->GetComponent<PlayerController>()->PlayerDead();
+				enemySpeed = 0;
+			}
 		}
 	}
 }
 
-
 void Enemy::OnNotify(const Player_Action& value)
 {
-	std::cout << value.hasPowerup;
 	if (value.hasPowerup == true)
-	{		
+	{
+		powerUp = true;
 		animation->Stop();
 		enemySpeed = weakenSpeed;
 		animation->Play("ghostDead", true);
 	}
 	else
 	{
+		powerUp = false;
 		animation->Stop();
 		enemySpeed = normalSpeed;
 	}
 	if (value.isDead == true)
 	{
-		m_Entity->SetPosition(300, 300);
+		playerDead = true;
 	}
 }
 
 void Enemy::Start()
 {
-	currentMovementState = MovementState::MOVE_DOWN;
+	soundIds = Engin::Get()->Audio().LoadSound("assets/audio/eat_ghost.wav");
+	currentMovementState = MovementState::MOVE_RIGHT;
 	CreateColliders();
 }
 
 void Enemy::Update(float dt)
 {
-	CheckPlayerCollisions();
-	x = m_Entity->GetX();
-	y = m_Entity->GetY();
-	int colIndex;
-	int colX;
-	int colY;
-	CheckCollision();
+	if (playerDead == false)
+	{
+		CheckPlayerCollisions();
+		x = m_Entity->GetX();
+		y = m_Entity->GetY();
+		int colIndex;
+		int colX;
+		int colY;
+		CheckCollision();
 
-	MovementState newMovementState = currentMovementState;
-	EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
+		MovementState newMovementState = currentMovementState;
+		EDirections collisionDirection = tileMap->IsColliding("Wall", m_Entity, &colIndex, &colX, &colY);
 
-	if (collisionDirection != EDirections::NONE) {
-		ChooseRandomDirection();
-		newMovementState = MovementState::IDLE;
-	}
-
-	else {
-		if (rand() % 100 < 10) {
+		if (collisionDirection != EDirections::NONE) {
 			ChooseRandomDirection();
-			newMovementState = currentMovementState; 
+			newMovementState = MovementState::IDLE;
 		}
+
+		else {
+			if (rand() % 100 < 10) {
+				ChooseRandomDirection();
+				newMovementState = currentMovementState;
+			}
+		}
+
+		switch (currentMovementState) {
+		case MovementState::MOVE_RIGHT:
+			x += enemySpeed * dt;
+			if (powerUp == false)
+			{
+				animation->Play("ghostRight", true);
+			}
+			if (x > 712) {
+				x = -36;
+			}
+			break;
+		case MovementState::MOVE_LEFT:
+			x -= enemySpeed * dt;
+			if (powerUp == false)
+				animation->Play("ghostLeft", true);
+			if (x < -36) {
+				x = 712;
+			}
+			break;
+		case MovementState::MOVE_UP:
+			y -= enemySpeed * dt;
+			if (powerUp == false)
+				animation->Play("ghostUp", true);
+			break;
+		case MovementState::MOVE_DOWN:
+			y += enemySpeed * dt;
+			if (powerUp == false)
+				animation->Play("ghostDown", true);
+			break;
+		case MovementState::IDLE:
+			ChooseRandomDirection();
+			newMovementState = currentMovementState;
+			break;
+		default:
+			break;
+		}
+
+		currentMovementState = newMovementState;
+
+		m_Entity->SetPosition(x, y);
+		upCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() - 16);
+		downCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() + 16);
+		rightCollider->SetPosition(m_Entity->GetX() + 16, m_Entity->GetY());
+		leftCollider->SetPosition(m_Entity->GetX() - 16, m_Entity->GetY());
 	}
-
-	switch (currentMovementState) {
-	case MovementState::MOVE_RIGHT:
-		x += enemySpeed * dt;
-		if (powerUp == false)
-		{
-			animation->Play("ghostRight", true);
-		}
-		if (x > 712) {
-			x = -36;
-		}
-		break;
-	case MovementState::MOVE_LEFT:
-		x -= enemySpeed * dt;
-		if (powerUp == false)
-		animation->Play("ghostLeft", true);
-		if (x < -36) {
-			x = 712;
-		}
-		break;
-	case MovementState::MOVE_UP:
-		y -= enemySpeed * dt;
-		if (powerUp == false)
-		animation->Play("ghostUp", true);
-		break;
-	case MovementState::MOVE_DOWN:
-		y += enemySpeed * dt;
-		if (powerUp == false)
-		animation->Play("ghostDown", true);
-		break;
-	case MovementState::IDLE:
-		ChooseRandomDirection();
-		newMovementState = currentMovementState;
-		break;
-	default:
-		break;
-	}
-
-	currentMovementState = newMovementState;
-
-	m_Entity->SetPosition(x, y);
-	upCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() - 16);
-	downCollider->SetPosition(m_Entity->GetX(), m_Entity->GetY() + 16);
-	rightCollider->SetPosition(m_Entity->GetX() + 16, m_Entity->GetY());
-	leftCollider->SetPosition(m_Entity->GetX() - 16, m_Entity->GetY());
 }
 
 void Enemy::ChooseRandomDirection()
@@ -203,19 +221,19 @@ void Enemy::CheckCollision()
 
 	if (dir == RIGHT)
 	{
-		x = colX + 18;
+		x = colX + 18.0f;
 	}
 	if (dir == LEFT)
 	{
-		x = colX - 26;
+		x = colX - 26.0f;
 	}
 	if (dir == DOWN)
 	{
-		y = colY + 18;
+		y = colY + 18.0f;
 	}
 	if (dir == UP)
 	{
-		y = colY - 26;
+		y = colY - 26.0f;
 	}
 
 }

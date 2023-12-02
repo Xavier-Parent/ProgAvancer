@@ -1,5 +1,5 @@
 #include "WorldService.h"
-
+#include "engin.h"
 void WorldService::Update(float dt)
 {
 	for (auto entity : m_EntityInWorld)
@@ -31,6 +31,7 @@ void WorldService::Load(const std::string& scene)
 			}
 			m_EntityInWorld.clear();
 			m_EntityMap.clear();
+			homer::Engin::Get()->Collider().Clear();
 		}
 
 		if (m_Scenes.count(scene) > 0) {
@@ -38,7 +39,6 @@ void WorldService::Load(const std::string& scene)
 			m_CurrentScene->Load();
 		}
 	}
-
 }
 
 void WorldService::Register(const std::string& name, IScene* scene)
@@ -102,7 +102,7 @@ void WorldService::Unload()
 		entity->Destroy();
 		delete entity;
 	}
-
+	homer::Engin::Get()->Collider().Clear();
 	m_EntityInWorld.clear();
 	m_EntityMap.clear();
 	m_EntityToStart.clear();

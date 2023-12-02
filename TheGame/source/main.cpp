@@ -18,6 +18,7 @@ INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT) {
 		InitGameplay();
 		theEngine->Start();
 	}
+	delete theEngine;
 	return 0;
 }
 
